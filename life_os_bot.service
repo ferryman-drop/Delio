@@ -1,0 +1,27 @@
+[Unit]
+Description=Life OS AI Assistant Bot
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/ai_assistant
+Environment="PYTHONUNBUFFERED=1"
+
+# Start bot
+ExecStart=/root/ai_assistant/venv/bin/python /root/ai_assistant/main.py
+
+# Restart policy
+Restart=always
+RestartSec=10
+KillMode=control-group
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=life_os_bot
+
+[Install]
+WantedBy=multi-user.target

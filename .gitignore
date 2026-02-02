@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+*.db
+*.sqlite
+.venv/
+venv/
+node_modules/
+.DS_Store
+ollama-data/
+nohup.out
+service_account.json

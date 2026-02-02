@@ -1,0 +1,64 @@
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: ai_assistant_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  bot:
+    build: .
+    container_name: ai_assistant_bot
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./bot.log:/app/bot.log
+      # Mount nohup.out if needed, or rely on docker logs
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    restart: unless-stopped
+
+  dashboard:
+    build: .
+    container_name: ai_assistant_dashboard
+    command: streamlit run dashboard.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./:/app
+    depends_on:
+      - bot
+    restart: unless-stopped
+
+#  # Future expansions (from Roadmap):
+#  ollama:
+#    image: ollama/ollama:latest
+#    ports:
+#      - "11434:11434"
+#    volumes:
+#      - ./ollama-data:/root/.ollama
+#    restart: unless-stopped
+#
+#  qdrant:
+#    image: qdrant/qdrant:v1.2
+#    ports:
+#      - "6333:6333"
+#    volumes:
+#      - qdrant_data:/qdrant/storage
+#    restart: unless-stopped
+
+volumes:
+  redis_data:
+  qdrant_data:
+  ollama-data:

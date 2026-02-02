@@ -1,0 +1,30 @@
+[Unit]
+Description=Telegram AI Assistant (DeepSeek/Gemini)
+After=network.target
+
+[Service]
+# User/Group to run the service
+# Якщо хочете запустити під іншим користувачем, змініть User=
+User=root
+# Group=root
+
+# Working Directory
+WorkingDirectory=/root/ai_assistant
+
+# Environment Variables from .env file (optional, but good practice to ensure they are loaded)
+# EnvironmentFile=/root/ai_assistant/.env
+
+# Command to execute
+# Вказуємо повний шлях до python у віртуальному оточенні та до скрипта
+ExecStart=/root/ai_assistant/venv/bin/python main.py
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=append:/root/ai_assistant/bot_run.log
+StandardError=append:/root/ai_assistant/bot_err.log
+
+[Install]
+WantedBy=multi-user.target
