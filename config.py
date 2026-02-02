@@ -61,7 +61,7 @@ if yaml_config.get('models', {}).get('aliases'):
 
 # --- LOGGING SETUP ---
 def setup_logging():
-    logger = logging.getLogger("LifeOS")
+    logger = logging.getLogger("Delio")
     
     # Only configure if not already configured
     if logger.handlers:

@@ -21,7 +21,7 @@ TimeoutStopSec=30
 # Logging
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=life_os_bot
+SyslogIdentifier=delio_bot
 
 [Install]
 WantedBy=multi-user.target

@@ -21,28 +21,28 @@ fi
 
 # 3. Install systemd service
 echo "📦 Installing systemd service..."
-sudo cp /root/ai_assistant/life_os_bot.service /etc/systemd/system/
+sudo cp /root/ai_assistant/delio_bot.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable life_os_bot
+sudo systemctl enable delio_bot
 
 # 4. Start bot
 echo "▶️  Starting bot..."
-sudo systemctl start life_os_bot
+sudo systemctl start delio_bot
 
 # 5. Check status
 sleep 3
-sudo systemctl status life_os_bot --no-pager
+sudo systemctl status delio_bot --no-pager
 
 # 6. Show recent logs
 echo ""
 echo "📋 Recent logs:"
-sudo journalctl -u life_os_bot -n 20 --no-pager
+sudo journalctl -u delio_bot -n 20 --no-pager
 
 echo ""
 echo "✅ Deployment complete!"
 echo ""
 echo "📌 Useful commands:"
-echo "  Status:  sudo systemctl status life_os_bot"
-echo "  Logs:    sudo journalctl -u life_os_bot -f"
-echo "  Restart: sudo systemctl restart life_os_bot"
-echo "  Stop:    sudo systemctl stop life_os_bot"
+echo "  Status:  sudo systemctl status delio_bot"
+echo "  Logs:    sudo journalctl -u delio_bot -f"
+echo "  Restart: sudo systemctl restart delio_bot"
+echo "  Stop:    sudo systemctl stop delio_bot"

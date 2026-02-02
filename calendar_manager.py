@@ -80,7 +80,7 @@ class CalendarManager:
             
             ics_content = f"""BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//LifeOS//Assistant//EN
+PRODID:-//Delio//Assistant//EN
 BEGIN:VEVENT
 UID:{uuid.uuid4()}
 DTSTAMP:{datetime.now().strftime('%Y%m%dT%H%M00Z')}

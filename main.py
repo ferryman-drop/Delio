@@ -8,7 +8,7 @@ import scheduler
 import core 
 
 # Setup Logging (already done in config.py)
-logger = logging.getLogger("LifeOS")
+logger = logging.getLogger("Delio")
 
 async def main():
     import os
