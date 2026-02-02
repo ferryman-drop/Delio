@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting Life OS Assistant (Python Mode)..."
+echo "🚀 Starting Delio Assistant (Python Mode)..."
 
 cd /root/ai_assistant
 

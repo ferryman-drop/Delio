@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Migration Script: user_profiles → user_memory_v2
-Big Bang Migration for Life OS Advanced Memory Architecture
+Big Bang Migration for Delio Advanced Memory Architecture
 
 CRITICAL: This script will:
 1. Backup existing database
@@ -330,7 +330,7 @@ def archive_old_tables(conn):
 def main():
     """Main migration flow"""
     print("=" * 60)
-    print("🚀 Life OS Advanced Memory Migration")
+    print("🚀 Delio Advanced Memory Migration")
     print("=" * 60)
     print()
     

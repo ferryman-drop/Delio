@@ -86,7 +86,7 @@ UID:{uuid.uuid4()}
 DTSTAMP:{datetime.now().strftime('%Y%m%dT%H%M00Z')}
 DTSTART:{start_str}
 SUMMARY:{title}
-DESCRIPTION:Created by Life OS Assistant
+DESCRIPTION:Created by Delio Assistant
 DURATION:PT{duration_minutes}M
 END:VEVENT
 END:VCALENDAR"""

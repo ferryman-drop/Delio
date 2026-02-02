@@ -3,13 +3,13 @@ import plotly.express as px
 import pandas as pd
 from life_map import LifeCalculator
 
-st.set_page_config(page_title="Life OS Dashboard", layout="wide")
+st.set_page_config(page_title="Delio Dashboard", layout="wide")
 
 # Init
 calc = LifeCalculator()
 
 # Sidebar
-st.sidebar.title("🧘 Life OS Control")
+st.sidebar.title("🧘 Delio Control")
 user_id = st.sidebar.text_input("User ID", "593510565") # Default to user
 
 if user_id:

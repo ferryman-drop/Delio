@@ -6,9 +6,24 @@ import core
 import config
 import memory_manager
 import memory
+from core.fsm import FSMController
+from core.state import State
+from states.observe import ObserveState
+from states.retrieve import RetrieveState
+from states.plan import PlanState
+from states.respond import RespondState
+from states.memory_write import MemoryWriteState
 
 router = Router()
 logger = logging.getLogger(__name__)
+
+# Initialize FSM (Single instance for the router)
+fsm = FSMController()
+fsm.register_handler(State.OBSERVE, ObserveState())
+fsm.register_handler(State.RETRIEVE, RetrieveState())
+fsm.register_handler(State.PLAN, PlanState())
+# RESPOND needs bot, will be set per request or use a wrapper
+fsm.register_handler(State.MEMORY_WRITE, MemoryWriteState())
 
 @router.message(Command("start"))
 async def cmd_start(message: types.Message):
@@ -34,7 +49,7 @@ async def cmd_start(message: types.Message):
     import config
     synergy_status = "🔄 Активна" if config.ENABLE_SYNERGY else "⏸️ Вимкнена"
     
-    msg = f"""🤖 Life OS Assistant v3.0 — Ваш AI стратег
+    msg = f"""🤖 Delio Assistant v3.0 — Ваш AI стратег
 
 🧠 AI Stack:
  • Gemini 2.0 Flash — швидкість + reasoning
@@ -94,7 +109,7 @@ async def cmd_memory(message: types.Message):
         return
         
     # 2. Format Output
-    report = ["🏢 **Life OS Structure**"]
+    report = ["🏢 **Delio Structure**"]
     
     # Emoji Map
     EMOJI_MAP = {
@@ -238,7 +253,16 @@ async def handle_text(message: types.Message):
         await message.answer(resp)  # No markdown parsing to avoid errors
         return
 
-    await core.process_ai_request(message, message.text)
+    # Deliver via FSM (Phase 1)
+    fsm.register_handler(State.RESPOND, RespondState(message.bot))
+    await fsm.process_event({
+        "user_id": user_id,
+        "type": "message",
+        "text": message.text
+    })
+
+    # Legacy call (Keep commented for reference or remove)
+    # await core.process_ai_request(message, message.text)
 
 @router.message(F.voice)
 async def handle_voice(message: types.Message):
@@ -258,8 +282,24 @@ async def handle_voice(message: types.Message):
     try:
         await message.bot.download_file(file_path, temp_filename)
         
-        # Process in Core
-        await core.process_voice_message(message, temp_filename)
+        # Transcribe (Legacy)
+        import core as legacy_core
+        raw_text = await legacy_core.transcribe_audio(temp_filename)
+        if not raw_text:
+             await message.answer("❌ Не вдалося розпізнати голос.")
+             return
+             
+        # Process Refinement (Legacy)
+        refined_text = await legacy_core.refine_text_with_deepseek(raw_text)
+        await message.answer(f"📝 **Розпізнано та очищено:**\n\n{refined_text}")
+
+        # Deliver via FSM
+        fsm.register_handler(State.RESPOND, RespondState(message.bot))
+        await fsm.process_event({
+            "user_id": message.from_user.id,
+            "type": "voice",
+            "text": refined_text
+        })
         
     except Exception as e:
         logger.error(f"Voice Error: {e}")

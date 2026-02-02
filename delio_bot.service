@@ -1,5 +1,5 @@
 [Unit]
-Description=Life OS AI Assistant Bot
+Description=Delio AI Assistant Bot
 After=network.target
 
 [Service]

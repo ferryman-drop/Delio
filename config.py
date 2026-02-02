@@ -37,7 +37,7 @@ MODEL_SMART = "gemini-2.5-pro"            # Tier 3: Complex Reasoning
 ENABLE_SYNERGY = os.getenv("ENABLE_SYNERGY", "true").lower() == "true"
 
 # Prompt
-SYSTEM_PROMPT = yaml_config.get('context', {}).get('system_prompt', """Ти — Life OS AI Assistant (v2.1).
+SYSTEM_PROMPT = yaml_config.get('context', {}).get('system_prompt', """Ти — Delio AI Assistant (v2.1).
 Твоя мета: Максимізувати ефективність та особистий розвиток користувача.
 Ти працюєш в 'Синергії': Gemini 2.0 (Швидкість/Креатив) + DeepSeek V3 (Логіка/Код).
 

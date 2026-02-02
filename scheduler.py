@@ -81,7 +81,7 @@ async def send_morning_briefing(user_id, insights, goals):
         goals_text = ", ".join(goals) if goals else "General Growth"
         
         prompt = f"""
-        You are a Life OS Assistant.
+        You are a Delio Assistant.
         The user has these new insights from yesterday:
         {insight_text}
         

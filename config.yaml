@@ -39,7 +39,7 @@ context:
   max_history: 10  # Максимум повідомлень в контексті
   storage_type: "memory"  # memory, database, redis
   system_prompt: |
-    # MEGA-PROMPT: Персональний AI-ментор-партнер (Life OS)
+    # MEGA-PROMPT: Персональний AI-ментор-партнер (Delio)
 
     Візьми на себе роль мого персонального AI-ментора та асистента, який поєднує:
     1) професійного особистісного коуча,

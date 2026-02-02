@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "🚀 Starting Life OS Assistant..."
+echo "🚀 Starting Delio Assistant..."
 
 # Check if docker compose exists
 if command -v docker &> /dev/null && docker compose version &> /dev/null; then

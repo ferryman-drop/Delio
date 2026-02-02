@@ -1,4 +1,4 @@
-# 🧬 Life OS Assistant - User Manual
+# 🧬 Delio Assistant - User Manual
 
 ## 🚀 Quick Start
 To launch the entire system (Bot + Dashboard + Database):

@@ -1,10 +1,10 @@
 #!/bin/bash
-# Life OS Bot Deployment Script
+# Delio Bot Deployment Script
 # Ensures only ONE instance runs
 
 set -e
 
-echo "🚀 Deploying Life OS Bot..."
+echo "🚀 Deploying Delio Bot..."
 
 # 1. Kill ALL existing bot processes
 echo "🔪 Killing existing processes..."

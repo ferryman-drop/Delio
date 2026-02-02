@@ -12,7 +12,7 @@ logger = logging.getLogger("Delio")
 
 async def main():
     import os
-    logger.info(f"🚀 Starting Life OS Assistant (PID: {os.getpid()})...")
+    logger.info(f"🚀 Starting Delio Assistant (PID: {os.getpid()})...")
     
     # Init Bot
     bot = Bot(token=config.TG_TOKEN)
