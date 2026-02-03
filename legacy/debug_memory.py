@@ -1,5 +1,5 @@
 
-import memory
+import old_memory as memory
 import sys
 import os
 from dotenv import load_dotenv

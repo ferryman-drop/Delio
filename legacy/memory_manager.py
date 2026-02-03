@@ -7,7 +7,7 @@ from datetime import datetime
 import uuid
 from typing import List, Dict, Any, Optional
 
-import memory  # ChromaDB / Vector Search wrapper
+import old_memory as memory  # ChromaDB / Vector Search wrapper
 import prefs   # User preferences
 
 logger = logging.getLogger(__name__)
@@ -133,6 +133,71 @@ class MemoryController:
                     output_tokens INTEGER,
                     cost_est REAL,
                     auditor_score INTEGER
+                )
+            ''')
+
+            # --- Advanced Memory V2 Tables ---
+            
+            # Main memory table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS user_memory_v2 (
+                    user_id INTEGER,
+                    section TEXT,
+                    key TEXT,
+                    value TEXT,
+                    confidence REAL DEFAULT 0.5,
+                    last_confirmed TEXT,
+                    ttl_days INTEGER,
+                    created_at TEXT,
+                    updated_at TEXT,
+                    metadata TEXT,
+                    PRIMARY KEY (user_id, section, key)
+                )
+            ''')
+            
+            # Conflict states table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS memory_conflicts (
+                    id TEXT PRIMARY KEY,
+                    user_id INTEGER,
+                    section TEXT,
+                    key TEXT,
+                    old_value TEXT,
+                    new_value TEXT,
+                    old_confidence REAL,
+                    new_confidence REAL,
+                    status TEXT DEFAULT 'unresolved',
+                    detected_at TEXT,
+                    resolved_at TEXT
+                )
+            ''')
+            
+            # Quarterly snapshots table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS memory_snapshots (
+                    id TEXT PRIMARY KEY,
+                    user_id INTEGER,
+                    snapshot_date TEXT,
+                    quarter TEXT,
+                    life_level TEXT,
+                    life_level_confidence REAL,
+                    summary TEXT,
+                    full_snapshot TEXT,
+                    created_at TEXT
+                )
+            ''')
+            
+            # Anomaly events table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS anomaly_events (
+                    id TEXT PRIMARY KEY,
+                    user_id INTEGER,
+                    type TEXT,
+                    signal TEXT,
+                    severity TEXT,
+                    confidence REAL,
+                    detected_at TEXT,
+                    status TEXT DEFAULT 'active'
                 )
             ''')
             

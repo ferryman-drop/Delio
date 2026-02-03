@@ -1,10 +1,16 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
+import sys
+import os
+
+# Add legacy path to sys.path
+sys.path.append(os.path.join(os.path.dirname(__file__), 'legacy'))
+
 import config
 import handlers
 import scheduler
-# Import subsystems to ensure init runs if not imported elsewhere
+# Import subsystems to ensure init runs
 import core 
 
 # Setup Logging (already done in config.py)
@@ -24,6 +30,28 @@ async def main():
     # Init Scheduler
     scheduler.init_scheduler(bot)
     
+    # Init FSM Infrastructure
+    from core.fsm import instance as fsm
+    from core.state import State
+    from states.observe import ObserveState
+    from states.retrieve import RetrieveState
+    from states.plan import PlanState
+    from states.decide import DecideState
+    from states.act import ActState
+    from states.respond import RespondState
+    from states.reflect import ReflectState
+    from states.memory_write import MemoryWriteState
+
+    fsm.register_handler(State.OBSERVE, ObserveState())
+    fsm.register_handler(State.RETRIEVE, RetrieveState())
+    fsm.register_handler(State.PLAN, PlanState())
+    fsm.register_handler(State.DECIDE, DecideState())
+    fsm.register_handler(State.ACT, ActState())
+    fsm.register_handler(State.RESPOND, RespondState(bot))
+    fsm.register_handler(State.REFLECT, ReflectState())
+    fsm.register_handler(State.MEMORY_WRITE, MemoryWriteState())
+    logger.info("✅ AID Kernel (FSM) initialized")
+
     # Init Advanced Memory System (V2)
     import memory_manager_v2 as mm2
     import memory_populator

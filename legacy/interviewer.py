@@ -63,11 +63,10 @@ class Interviewer:
         
         if not target_section:
             # If all skipped or full, try clearing skips? Or just say done.
-            # Let's check if we have any skipped ones to fallback
             if any(r.exists(f"interview:skip:{user_id}:{s}") for s in PRIORITY_SECTIONS):
-                return "😴 **Відкладено.** Ви пропустили всі доступні питання. Спробуйте пізніше (через годину)."
+                return "😴 *Відкладено.* Ви пропустили всі доступні питання. Спробуйте пізніше."
             
-            return "🎉 **Все добре!** Ваша пам'ять заповнена. Я не бачу критичних прогалин. Використовуйте `/memory`, щоб переглянути."
+            return "🎉 *Все добре!* Ваша пам'ять заповнена. Я не бачу критичних прогалин. Використовуйте `/memory`."
 
         # 2. Generate Question
         question = self._generate_question(target_section)
@@ -76,7 +75,7 @@ class Interviewer:
         r.set(f"interview:state:{user_id}", STATE_ASKING)
         r.set(f"interview:section:{user_id}", target_section)
         
-        return f"🎤 **Режим Інтерв'ю**\nДавайте заповнимо розділ **{str(target_section).replace('_', ' ').title()}**.\n\n{question}\n\n(Напишіть відповідь, або /cancel щоб скасувати, /skip щоб пропустити)"
+        return f"🎤 *Режим Інтерв'ю*\nРозділ: *{str(target_section).replace('_', ' ').title()}*\n\n{question}\n\n(_Відповідь або /cancel | /skip_)"
 
     async def process_answer(self, user_id: int, text: str):
         """Handle user answer during interview"""
@@ -87,7 +86,7 @@ class Interviewer:
                 r.setex(f"interview:skip:{user_id}:{section}", 3600, "1")
             
             self._clear_state(user_id)
-            return f"🚫 Питання про **{section}** відкладено на 1 годину."
+            return f"🚫 Питання про *{section}* відкладено."
         
         section = r.get(f"interview:section:{user_id}")
         if not section:
@@ -112,7 +111,7 @@ class Interviewer:
         # 2. Clear state
         self._clear_state(user_id)
         
-        return f"✅ Збережено! Оновлено розділ {section}.\n\nЯ додав це у пам'ять. Напишіть /interview знову, щоб продовжити заповнювати прогалини."
+        return f"✅ *Збережено!* Оновлено розділ {section}.\n\nНапишіть /interview знову, щоб продовжити."
 
     def _generate_question(self, section: str) -> str:
         """Generate a contextual question for the section"""

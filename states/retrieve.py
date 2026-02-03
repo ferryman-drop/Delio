@@ -2,27 +2,32 @@ import logging
 from states.base import BaseState
 from core.state import State
 from core.context import ExecutionContext
+from core.memory.funnel import ContextFunnel
 
 logger = logging.getLogger("Delio.Retrieve")
 
 class RetrieveState(BaseState):
     async def execute(self, context: ExecutionContext) -> State:
-        # 1. Short-term memory (Recent messages cache)
-        import core as legacy_core
-        recent_context = legacy_core.get_cached_context(context.user_id)
-        context.memory_context["recent_messages"] = recent_context
+        logger.debug(f"🧠 Aggregating context for user {context.user_id}")
         
-        # 2. Long-term memory (ChromaDB)
-        import memory as legacy_memory
-        if legacy_memory.collection:
-            memories = legacy_memory.search_memory(context.user_id, context.raw_input)
-            context.memory_context["long_term"] = memories
-        
-        # 3. Structured memory (SQLite)
-        import memory_manager_v2 as legacy_mm2
-        if legacy_mm2.structured_memory:
-            structured = legacy_mm2.structured_memory.get_all_memory(context.user_id)
-            context.memory_context["structured"] = structured
+        try:
+            # Use the new ContextFunnel to get consolidated data
+            funnel_data = await ContextFunnel.get_all_context(
+                user_id=context.user_id,
+                query=context.raw_input
+            )
             
-        logger.debug(f"🧠 Memory retrieved for user {context.user_id}")
-        return State.PLAN
+            # Update ExecutionContext with new data structure
+            context.memory_context = funnel_data
+            
+            # Extract Life Level if available (for routing/planning)
+            # Section: life_level, Key: current
+            life_level_data = funnel_data.get("structured_profile", {}).get("life_level", {})
+            context.metadata["life_level"] = life_level_data.get("current", {}).get("value", "?")
+            
+            return State.PLAN
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to retrieve context: {e}")
+            context.errors.append(f"Retrieve failure: {str(e)}")
+            return State.ERROR

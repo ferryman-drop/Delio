@@ -10,18 +10,17 @@ from collections import deque, defaultdict
 from datetime import datetime
 from openai import OpenAI
 
+import redis
 import config
-import memory
+import old_memory as memory
 import memory_manager
 import router
 import tools
 import roles
 import personas
-import prefs
-import auditor
-import redis
 import telemetry
 import memory_integration  # Advanced memory system hook
+from core.state_guard import guard, Action
 
 # Init Logger
 logger = logging.getLogger(__name__)
@@ -71,8 +70,7 @@ def resolve_model_alias(tag):
 # --- CORE AI LOGIC ---
 async def call_llm_agentic(user_id, text, system_prompt, preferred='gemini', status_msg=None):
     # ... Copy of call_llm_agentic logic ...
-    # Due to tool limitations, I will implement a simplified version or reuse the existing one
-    # But since I am overwriting, I must provide the full code.
+    guard.assert_allowed(Action.LLM_CALL)
     
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     smart_ctx = await memory_manager.get_smart_context(user_id, text)

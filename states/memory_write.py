@@ -2,14 +2,16 @@ import logging
 from states.base import BaseState
 from core.state import State
 from core.context import ExecutionContext
+from core.state_guard import guard, Action
 
 logger = logging.getLogger("Delio.MemoryWrite")
 
 class MemoryWriteState(BaseState):
     async def execute(self, context: ExecutionContext) -> State:
+        guard.assert_allowed(context.user_id, Action.MEMORY_WRITE)
         try:
             # Wrap legacy memory saving
-            import memory as legacy_memory
+            import old_memory as legacy_memory
             
             logger.debug(f"💾 Saving memory for user {context.user_id}")
             
@@ -21,13 +23,11 @@ class MemoryWriteState(BaseState):
             )
             
             # Note: memory_integration.process_with_memory (V2) 
-            # is normally called at the end of process_ai_request.
-            # We'll integrate it here in Phase 1.
             import memory_integration
             await memory_integration.process_with_memory(
                 user_id=context.user_id,
-                user_input=context.raw_input,
-                bot_response=context.response,
+                user_message=context.raw_input,
+                ai_response=context.response,
                 model_used=context.metadata.get("model_used", "AID"),
                 life_level=context.metadata.get("life_level", None)
             )

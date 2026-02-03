@@ -11,6 +11,7 @@ import roles
 import routing_learner
 import digest_manager
 import memory_manager_v2 as mm2  # Advanced memory system
+from core.fsm import instance as fsm
 
 logger = logging.getLogger(__name__)
 
@@ -147,10 +148,18 @@ async def apply_memory_decay_all_users():
     except Exception as e:
         logger.error(f"❌ Memory Decay Cycle failed: {e}")
 
+async def trigger_heartbeat():
+    """
+    Periodic heartbeat that enters the FSM for autonomous background tasks.
+    """
+    logger.debug("💓 Triggering FSM Heartbeat")
+    await fsm.process_event({
+        "user_id": 0, # System user
+        "type": "heartbeat",
+        "text": "Check system state and pending tasks."
+    })
+
 async def proactive_checkin():
-    """
-    Optional: Schedule a morning greeting or focus reminder
-    """
     pass
 
 def init_scheduler(bot=None):
@@ -182,11 +191,11 @@ def init_scheduler(bot=None):
             replace_existing=True
         )
         
-        # Schedule a quick "heartbeat" log every hour
+        # Schedule a real FSM heartbeat every 15 minutes
         scheduler.add_job(
-            lambda: logger.info("💓 System Heartbeat: Scheduler is alive"),
-            CronTrigger(minute=0), # Every hour
-            id="heartbeat",
+            trigger_heartbeat,
+            CronTrigger(minute="0,15,30,45"),
+            id="fsm_heartbeat",
             replace_existing=True
         )
         

@@ -8,6 +8,6 @@ class ObserveState(BaseState):
         # In the future, this will handle voice transcription, file parsing, etc.
         if not context.raw_input:
             context.errors.append("Empty input in OBSERVE")
-            return State.IDLE
+            return State.ERROR
             
         return State.RETRIEVE

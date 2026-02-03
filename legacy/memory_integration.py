@@ -9,7 +9,7 @@ This module provides a wrapper that:
 """
 
 import logging
-import memory_populator
+import old_memory as memory_populator
 import model_control
 
 logger = logging.getLogger(__name__)
@@ -34,14 +34,13 @@ async def process_with_memory(user_id: int, user_message: str, ai_response: str,
     
     try:
         # 1. Auto-populate memory
-        if memory_populator.memory_populator:
-            memory_populator.memory_populator.process_interaction(
-                user_id,
-                user_message,
-                ai_response,
-                model_used,
-                life_level
-            )
+        import memory_manager
+        memory_manager.global_memory.process_interaction(
+            user_id,
+            user_message,
+            ai_response,
+            model_used
+        )
         
         # 2. Get MCP and format for Telegram
         if model_control.model_controller:

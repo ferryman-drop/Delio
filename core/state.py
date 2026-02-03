@@ -11,3 +11,4 @@ class State(Enum):
     SCHEDULE = auto()
     REFLECT = auto()
     MEMORY_WRITE = auto()
+    ERROR = auto()

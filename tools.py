@@ -3,10 +3,10 @@ import logging
 from duckduckgo_search import DDGS
 from RestrictedPython import compile_restricted, safe_builtins
 from RestrictedPython.Guards import guarded_iter_unpack_sequence, safe_globals
-import io
 import sys
 import asyncio
 from contextlib import redirect_stdout, redirect_stderr
+from core.state_guard import guard, Action
 
 # Shim for AsyncDDGS if missing in newer versions of duckduckgo_search
 try:
@@ -22,14 +22,16 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-async def search_web(query: str, max_results: int = 5) -> str:
+async def search_web(query: str, user_id: int, max_results: int = 5) -> str:
     """
     Пошук інформації в інтернеті через DuckDuckGo (Асинхронно).
     
     Args:
         query: Рядок пошукового запиту.
+        user_id: ID користувача Telegram.
         max_results: Максимальна кількість результатів (за замовчуванням 5).
     """
+    guard.assert_allowed(user_id, Action.NETWORK)
     try:
         logger.info(f"🔍 Searching web for: {query}")
         
@@ -54,14 +56,16 @@ async def search_web(query: str, max_results: int = 5) -> str:
         logger.error(f"❌ Search error: {e}")
         return f"❌ Помилка пошуку: {str(e)}"
 
-async def execute_python(code: str, timeout: int = 15) -> str:
+async def execute_python(code: str, user_id: int, timeout: int = 15) -> str:
     """
     Виконання коду на Python в ізольованому середовищі (Асинхронно).
     
     Args:
         code: Повний код на Python для виконання.
+        user_id: ID користувача Telegram.
         timeout: Час виконання в секундах (за замовчуванням 15).
     """
+    guard.assert_allowed(user_id, Action.DOCKER)
     import tempfile
     import os
     
@@ -130,6 +134,7 @@ def list_project_dir(user_id: int, path: str = ".") -> str:
         user_id: ID користувача Telegram.
         path: Відносний шлях до папки (за замовчуванням '.').
     """
+    guard.assert_allowed(user_id, Action.FS_READ)
     import roles
     import os
     if not roles.is_admin(int(user_id)):
@@ -149,6 +154,7 @@ def read_project_file(user_id: int, filepath: str) -> str:
         user_id: ID користувача Telegram.
         filepath: Шлях до файлу.
     """
+    guard.assert_allowed(user_id, Action.FS_READ)
     import roles
     if not roles.is_admin(int(user_id)):
         return "❌ Доступ заборонено. Цей інструмент лише для адміністраторів."
@@ -170,6 +176,7 @@ def edit_project_file(user_id: int, filepath: str, search_text: str, replace_tex
         search_text: Текст, який треба замінити.
         replace_text: Новий текст.
     """
+    guard.assert_allowed(user_id, Action.FS_WRITE)
     import roles
     if not roles.is_admin(int(user_id)):
         return "❌ Доступ заборонено. Цей інструмент лише для адміністраторів."
@@ -198,6 +205,7 @@ def run_terminal_command(user_id: int, command: str) -> str:
         user_id: ID користувача Telegram.
         command: Команда для виконання.
     """
+    guard.assert_allowed(user_id, Action.NETWORK) # Treat terminal as external action
     import roles
     import subprocess
     if not roles.is_admin(int(user_id)):
@@ -218,9 +226,10 @@ def save_user_note(user_id: int, content: str, topic: str = "general") -> str:
     
     Args:
         user_id: ID користувача Telegram.
-        content: Текст нотатки (що саме запам'ятати).
+        content: Зміст нотатки.
         topic: Тема нотатки (наприклад, 'особисте', 'робота', 'паролі' - не для секретів!).
     """
+    guard.assert_allowed(user_id, Action.MEMORY_WRITE)
     import memory
     import memory_manager
     try:

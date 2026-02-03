@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, AsyncMock
-import core
+import old_core as core
 import router
 
 class TestModelSwitch(unittest.IsolatedAsyncioTestCase):

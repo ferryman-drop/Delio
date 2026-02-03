@@ -2,6 +2,7 @@ import logging
 from states.base import BaseState
 from core.state import State
 from core.context import ExecutionContext
+from core.state_guard import guard, Action
 
 logger = logging.getLogger("Delio.Respond")
 
@@ -12,13 +13,14 @@ class RespondState(BaseState):
     async def execute(self, context: ExecutionContext) -> State:
         if not context.response:
             logger.warning("⚠️ No response to send in RESPOND")
-            return State.IDLE
+            return State.ERROR
             
         # Deliver response to Telegram (user_id is the chat_id)
+        guard.assert_allowed(context.user_id, Action.NETWORK)
         try:
-            # We add the model information footer as in legacy process_ai_request
-            model_footer = f"\n\n_🤖 {context.metadata.get('model_used', 'AID')}_"
-            final_response = context.response + model_footer
+            # Custom iconic footer
+            footer = context.metadata.get('model_used', 'AID')
+            final_response = f"{context.response}\n\n_{footer}_"
             
             # Simple chunking if needed (legacy limit 4000)
             if len(final_response) > 4000:
@@ -32,5 +34,5 @@ class RespondState(BaseState):
             logger.error(f"❌ Failed to send response: {e}")
             context.errors.append(str(e))
             
-        # Transitions to REFLECT or MEMORY_WRITE
-        return State.MEMORY_WRITE
+        # Transitions to REFLECT
+        return State.REFLECT

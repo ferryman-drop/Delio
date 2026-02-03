@@ -1,6 +1,7 @@
 import logging
 from core.state import State
 from core.context import ExecutionContext
+from core.state_guard import guard
 
 logger = logging.getLogger("Delio.FSM")
 
@@ -16,35 +17,50 @@ class FSMController:
         """
         Main entry point for any external event (message, heartbeat, etc.)
         """
+        user_id = event_data.get("user_id", 0)
         context = ExecutionContext(
-            user_id=event_data.get("user_id"),
+            user_id=user_id,
             event_type=event_data.get("type", "message"),
             raw_input=event_data.get("text", "")
         )
         
-        logger.info(f"🌀 FSM Starting process for event: {context.event_type}")
+        logger.info(f"🌀 FSM Starting process for user {user_id} (event: {context.event_type})")
         context.add_trace("START")
 
-        # Initial state
-        self.current_state = State.OBSERVE
-        
-        while self.current_state != State.IDLE:
-            handler = self.state_handlers.get(self.current_state)
-            if not handler:
-                logger.error(f"❌ No handler for state: {self.current_state}")
-                context.errors.append(f"Missing handler for {self.current_state}")
-                break
+        # Initial transition
+        try:
+            guard.force_idle(user_id) # Ensure fresh start
+            guard.enter(user_id, State.OBSERVE)
+            current_state = State.OBSERVE
             
-            logger.debug(f"➡️ Entering state: {self.current_state}")
-            context.add_trace(self.current_state.name)
+            while current_state != State.IDLE:
+                handler = self.state_handlers.get(current_state)
+                if not handler:
+                    logger.error(f"❌ No handler for state: {current_state}")
+                    context.errors.append(f"Missing handler for {current_state}")
+                    guard.enter(user_id, State.ERROR)
+                    current_state = State.ERROR
+                    break
+                
+                logger.debug(f"➡️ User {user_id} entering state: {current_state}")
+                context.add_trace(current_state.name)
+                
+                try:
+                    next_state = await handler.execute(context)
+                    # Enforce transition through Guard
+                    guard.enter(user_id, next_state)
+                    current_state = next_state
+                except Exception as e:
+                    logger.exception(f"💥 Error in state {current_state} for user {user_id}: {e}")
+                    context.errors.append(str(e))
+                    guard.enter(user_id, State.ERROR)
+                    current_state = State.ERROR
             
-            try:
-                next_state = await handler.execute(context)
-                self.current_state = next_state
-            except Exception as e:
-                logger.exception(f"💥 Error in state {self.current_state}: {e}")
-                context.errors.append(str(e))
-                self.current_state = State.IDLE # Or error handling state
-        
-        logger.info(f"✅ FSM Processed. Errors: {len(context.errors)}")
+            logger.info(f"✅ FSM Processed user {user_id}. Trace: {context.trace}")
+        finally:
+            guard.force_idle(user_id)
+            
         return context
+
+# Singleton instance for the system
+instance = FSMController()
