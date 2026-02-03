@@ -31,7 +31,7 @@ async def search_web(query: str, user_id: int, max_results: int = 5) -> str:
         user_id: ID користувача Telegram.
         max_results: Максимальна кількість результатів (за замовчуванням 5).
     """
-    guard.assert_allowed(user_id, Action.NETWORK)
+    await guard.assert_allowed(user_id, Action.NETWORK)
     try:
         logger.info(f"🔍 Searching web for: {query}")
         
@@ -65,7 +65,7 @@ async def execute_python(code: str, user_id: int, timeout: int = 15) -> str:
         user_id: ID користувача Telegram.
         timeout: Час виконання в секундах (за замовчуванням 15).
     """
-    guard.assert_allowed(user_id, Action.DOCKER)
+    await guard.assert_allowed(user_id, Action.DOCKER)
     import tempfile
     import os
     
@@ -126,7 +126,7 @@ def switch_model(user_id: int, model_name: str) -> str:
     except Exception as e:
         return f"❌ Помилка при зміні моделі: {str(e)}"
 
-def list_project_dir(user_id: int, path: str = ".") -> str:
+async def list_project_dir(user_id: int, path: str = ".") -> str:
     """
     Показати список файлів у проекті (Адмін-інструмент).
     
@@ -134,7 +134,7 @@ def list_project_dir(user_id: int, path: str = ".") -> str:
         user_id: ID користувача Telegram.
         path: Відносний шлях до папки (за замовчуванням '.').
     """
-    guard.assert_allowed(user_id, Action.FS_READ)
+    await guard.assert_allowed(user_id, Action.FS_READ)
     import roles
     import os
     if not roles.is_admin(int(user_id)):
@@ -146,7 +146,7 @@ def list_project_dir(user_id: int, path: str = ".") -> str:
     except Exception as e:
         return f"❌ Помилка: {str(e)}"
 
-def read_project_file(user_id: int, filepath: str) -> str:
+async def read_project_file(user_id: int, filepath: str) -> str:
     """
     Прочитати вміст файлу проекту (Адмін-інструмент).
     
@@ -154,7 +154,7 @@ def read_project_file(user_id: int, filepath: str) -> str:
         user_id: ID користувача Telegram.
         filepath: Шлях до файлу.
     """
-    guard.assert_allowed(user_id, Action.FS_READ)
+    await guard.assert_allowed(user_id, Action.FS_READ)
     import roles
     if not roles.is_admin(int(user_id)):
         return "❌ Доступ заборонено. Цей інструмент лише для адміністраторів."
@@ -166,7 +166,7 @@ def read_project_file(user_id: int, filepath: str) -> str:
     except Exception as e:
         return f"❌ Помилка читання: {str(e)}"
 
-def edit_project_file(user_id: int, filepath: str, search_text: str, replace_text: str) -> str:
+async def edit_project_file(user_id: int, filepath: str, search_text: str, replace_text: str) -> str:
     """
     Редагувати файл проекту (Адмін-інструмент). Пошук і заміна тексту.
     
@@ -176,7 +176,7 @@ def edit_project_file(user_id: int, filepath: str, search_text: str, replace_tex
         search_text: Текст, який треба замінити.
         replace_text: Новий текст.
     """
-    guard.assert_allowed(user_id, Action.FS_WRITE)
+    await guard.assert_allowed(user_id, Action.FS_WRITE)
     import roles
     if not roles.is_admin(int(user_id)):
         return "❌ Доступ заборонено. Цей інструмент лише для адміністраторів."
@@ -196,7 +196,7 @@ def edit_project_file(user_id: int, filepath: str, search_text: str, replace_tex
     except Exception as e:
         return f"❌ Помилка редагування: {str(e)}"
 
-def run_terminal_command(user_id: int, command: str) -> str:
+async def run_terminal_command(user_id: int, command: str) -> str:
     """
     Виконати будь-яку команду в терміналі сервера (Адмін-інструмент).
     Може використовуватися для перезапуску бота (systemctl restart ai_assistant) тощо.
@@ -205,7 +205,7 @@ def run_terminal_command(user_id: int, command: str) -> str:
         user_id: ID користувача Telegram.
         command: Команда для виконання.
     """
-    guard.assert_allowed(user_id, Action.NETWORK) # Treat terminal as external action
+    await guard.assert_allowed(user_id, Action.NETWORK) # Treat terminal as external action
     import roles
     import subprocess
     if not roles.is_admin(int(user_id)):
@@ -219,7 +219,7 @@ def run_terminal_command(user_id: int, command: str) -> str:
     except Exception as e:
         return f"❌ Помилка терміналу: {str(e)}"
 
-def save_user_note(user_id: int, content: str, topic: str = "general") -> str:
+async def save_user_note(user_id: int, content: str, topic: str = "general") -> str:
     """
     Зберегти важливу інформацію або нотатку про користувача.
     Використовуйте це, коли користувач просить 'запам'ятати' щось важливе.
@@ -229,7 +229,7 @@ def save_user_note(user_id: int, content: str, topic: str = "general") -> str:
         content: Зміст нотатки.
         topic: Тема нотатки (наприклад, 'особисте', 'робота', 'паролі' - не для секретів!).
     """
-    guard.assert_allowed(user_id, Action.MEMORY_WRITE)
+    await guard.assert_allowed(user_id, Action.MEMORY_WRITE)
     import memory
     import memory_manager
     try:

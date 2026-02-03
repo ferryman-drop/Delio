@@ -13,6 +13,8 @@ class ExecutionContext:
     metadata: Dict[str, Any] = field(default_factory=dict)
     memory_context: Dict[str, Any] = field(default_factory=dict)
     plan: Optional[Any] = None
+    tool_calls: List[Dict[str, Any]] = field(default_factory=list)
+    tool_outputs: List[Dict[str, Any]] = field(default_factory=list)
     act_results: List[Any] = field(default_factory=list)
     response: str = ""
     

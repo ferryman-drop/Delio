@@ -1,9 +1,14 @@
 import logging
-import config
 import asyncio
+import config
+import json
+import re
+from typing import List, Dict, Any
 from states.base import BaseState
 from core.state import State
 from core.context import ExecutionContext
+from core import llm_service
+from core.tool_registry import registry
 
 logger = logging.getLogger("Delio.Plan")
 
@@ -16,42 +21,47 @@ class PlanState(BaseState):
             system_instruction = self._build_system_instruction(context)
             
             # 2. ACTOR PHASE (Gemini)
-            import old_core as legacy_core
             preferred = context.metadata.get("preferred_model", "gemini")
             
-            # We call the legacy actor
-            resp_text, model_used = await legacy_core.call_llm_agentic(
+            # Use new service adapter
+            resp_text, model_used = await llm_service.call_actor(
                 user_id=context.user_id,
                 text=context.raw_input,
-                system_prompt=system_instruction,
-                preferred=preferred
+                system_instruction=system_instruction,
+                preferred_model=preferred
             )
             
             # 3. CRITIC PHASE (DeepSeek validation)
             if config.ENABLE_SYNERGY and "Error" not in model_used:
-                validated_resp, synergy_label = await self._run_critic(
+                validated_resp, synergy_label = await llm_service.call_critic(
                     user_query=context.raw_input,
                     actor_response=resp_text,
                     instruction=system_instruction
                 )
                 
-                context.response = validated_resp
+                final_text = validated_resp
                 context.metadata["model_used"] = synergy_label
             else:
-                context.response = resp_text
+                final_text = resp_text
                 # Icon mapping
                 icon = "♊"
                 if "pro" in model_used.lower(): icon = "🎓"
                 elif "deepseek" in model_used.lower(): icon = "🐋"
                 context.metadata["model_used"] = icon
 
-            # 4. Telemetry (Log for /logic command)
+            # 4. PARSE TOOL CALLS (JSON Extraction)
+            context.tool_calls = self._extract_tool_calls(final_text)
+            
+            # Clean response text from JSON for display (optional, depending on UX)
+            context.response = self._cleanup_response(final_text)
+
+            # 5. Telemetry
             try:
                 import telemetry
                 telemetry.log_routing_event(
                     user_id=context.user_id,
                     life_level=context.metadata.get("life_level", "Unknown"),
-                    complexity="Medium", # Static for now, can be dynamic
+                    complexity="Medium", 
                     model=context.metadata["model_used"],
                     in_txt=context.raw_input,
                     out_txt=context.response
@@ -59,61 +69,27 @@ class PlanState(BaseState):
             except Exception as te:
                 logger.warning(f"⚠️ Telemetry fail: {te}")
             
+            # --- CONDITIONAL ROUTING ---
+            
+            # 1. Check for Critic Rejection
+            synergy_label = context.metadata.get("model_used", "")
+            if "⚠️" in synergy_label:
+                logger.warning(f"⛔ Plan Rejected by Critic. User: {context.user_id}")
+                context.errors.append("Critic rejected the response (Potential Safety/Logic Issue)")
+                return State.ERROR
+            
+            # 2. Check for Empty Response (if no tool calls)
+            if not context.tool_calls and (not context.response or len(context.response.strip()) < 2):
+                logger.warning(f"⛔ Plan Empty. User: {context.user_id}")
+                context.errors.append("Actor produced empty response")
+                return State.ERROR
+
             return State.DECIDE
             
         except Exception as e:
             logger.exception(f"❌ Error in PlanState: {e}")
             context.errors.append(str(e))
             return State.ERROR
-
-    async def _run_critic(self, user_query, actor_response, instruction) -> (str, str):
-        """
-        Actor-Critic Synergy: DeepSeek validates the Actor's (Gemini) response.
-        """
-        try:
-            from openai import OpenAI
-            ds_client = OpenAI(api_key=config.DEEPSEEK_KEY, base_url="https://api.deepseek.com")
-            
-            synergy_prompt = f"""[ACTOR-CRITIC SYNERGY] 
-Ти — AID Critic (DeepSeek). Твоя задача — проаналізувати відповідь AID Actor (Gemini).
-
-ПРАВИЛА:
-1. Якщо відповідь правильна, логічна та безпечна — поверни статус: "✅ VALIDATED" і саму відповідь без затримок.
-2. Якщо є помилки, логічні прогалини або відхилення від інструкцій — надай ТІЛЬКИ покращену версію відповіді.
-3. Звертай увагу на точність фактів та відповідність Life Level користувача.
-
-ІНСТРУКЦІЯ АКТОРУ:
-{instruction[:500]}... (truncated)
-
-{config.TELEGRAM_STYLE}
-
-ЗАПИТ КОРИСТУВАЧА:
-{user_query}
-
-ВІДПОВІДЬ АКТОРА (Gemini):
-{actor_response}
-
-ТВІЙ КРИТИЧНИЙ ВИСНОВОК:"""
-
-            response = await asyncio.to_thread(
-                ds_client.chat.completions.create,
-                model="deepseek-chat",
-                messages=[{"role": "user", "content": synergy_prompt}],
-                temperature=0.3
-            )
-            
-            critic_output = response.choices[0].message.content
-            
-            if "✅ VALIDATED" in critic_output or "VALIDATED" in critic_output:
-                # Clean up the label from response if it leaked
-                clean_resp = critic_output.replace("✅ VALIDATED", "").replace("VALIDATED", "").strip()
-                if not clean_resp: # If it was just the label
-                    return actor_response, "♊"
-                return clean_resp, "♊+🐋"
-            
-        except Exception as e:
-            logger.warning(f"⚠️ Critic failed: {e}")
-            return actor_response, "♊⚠️"
 
     def _build_system_instruction(self, context: ExecutionContext) -> str:
         # (Same as before, keep consolidated)
@@ -136,8 +112,60 @@ class PlanState(BaseState):
             for m in memories:
                 instruction_parts.append(f"• {m}")
 
+        # --- TOOL DEFINITIONS ---
+        tools = registry.get_definitions()
+        if tools:
+            instruction_parts.append("\n### ДОСТУПНІ ІНСТРУМЕНТИ (TOOLS):")
+            instruction_parts.append("Якщо тобі потрібно виконати дію, виклич інструмент, повернувши JSON у форматі:")
+            instruction_parts.append("```json\n{\"tool_calls\": [{\"name\": \"tool_name\", \"arguments\": {\"arg1\": \"val1\"}}]}\n```")
+            for t in tools:
+                instruction_parts.append(f"- **{t['name']}**: {t['description']}")
+                instruction_parts.append(f"  Params: {json.dumps(t['parameters'])}")
+
+        # --- TOOL OUTPUTS (If returning from ACT) ---
+        if context.tool_outputs:
+            instruction_parts.append("\n### РЕЗУЛЬТАТИ ВИКОНАННЯ ІНСТРУМЕНТІВ:")
+            for output in context.tool_outputs:
+                name = output.get("name")
+                res = output.get("output") or output.get("error")
+                instruction_parts.append(f"• Tool '{name}': {res}")
+            
+            # Important: Clear tool_outputs or track them to avoid infinite reprocessing if not careful
+            # Generally, we want to clear tool_calls so we don't re-execute them
+            context.tool_calls = []
+
         instruction_parts.append("\n### ТВОЇ ОСНОВНІ ІНСТРУКЦІЇ:")
         instruction_parts.append(config.SYSTEM_PROMPT)
         instruction_parts.append("\n" + config.TELEGRAM_STYLE)
         
         return "\n".join(instruction_parts)
+
+    def _extract_tool_calls(self, text: str) -> List[Dict[str, Any]]:
+        """Extracts tool calls from JSON blocks in the text."""
+        try:
+            # Look for JSON blocks
+            json_blocks = re.findall(r"```json\s*(.*?)\s*```", text, re.DOTALL)
+            if not json_blocks:
+                # Try simple brace matching if no markdown blocks
+                match = re.search(r"(\{.*\})", text, re.DOTALL)
+                if match:
+                    json_blocks = [match.group(1)]
+            
+            tool_calls = []
+            for block in json_blocks:
+                try:
+                    data = json.loads(block)
+                    if "tool_calls" in data:
+                        tool_calls.extend(data["tool_calls"])
+                except json.JSONDecodeError:
+                    continue
+            return tool_calls
+        except Exception as e:
+            logger.error(f"Error parsing tool calls: {e}")
+            return []
+
+    def _cleanup_response(self, text: str) -> str:
+        """Removes JSON blocks from the response for cleaner output."""
+        clean = re.sub(r"```json\s*(.*?)\s*```", "", text, flags=re.DOTALL).strip()
+        # If it was just JSON, return a placeholder or empty
+        return clean

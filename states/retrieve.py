@@ -2,7 +2,8 @@ import logging
 from states.base import BaseState
 from core.state import State
 from core.context import ExecutionContext
-from core.memory.funnel import ContextFunnel
+from core.memory.funnel import funnel
+from core.state_guard import guard, Action
 
 logger = logging.getLogger("Delio.Retrieve")
 
@@ -11,10 +12,10 @@ class RetrieveState(BaseState):
         logger.debug(f"🧠 Aggregating context for user {context.user_id}")
         
         try:
-            # Use the new ContextFunnel to get consolidated data
-            funnel_data = await ContextFunnel.get_all_context(
+            # Use the new ContextFunnel singleton
+            funnel_data = await funnel.aggregate_context(
                 user_id=context.user_id,
-                query=context.raw_input
+                raw_input=context.raw_input
             )
             
             # Update ExecutionContext with new data structure

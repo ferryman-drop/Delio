@@ -8,9 +8,13 @@ logger = logging.getLogger("Delio.Decide")
 class DecideState(BaseState):
     async def execute(self, context: ExecutionContext) -> State:
         # Determine if we should Act or Respond
-        # For now, if it's a heartbeat, we might ACT.
-        # If it's a message, we RESPOND.
         
+        # 1. Check for explicit tool calls from PLAN
+        if context.tool_calls:
+            logger.info(f"🛠️ Tool calls detected ({len(context.tool_calls)}). Routing to ACT.")
+            return State.ACT
+
+        # 2. Check for heartbeat/background triggers
         if context.event_type == "heartbeat":
             logger.info("🤖 Autonomy trigger detected in DECIDE")
             return State.ACT

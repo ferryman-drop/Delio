@@ -10,6 +10,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'legacy'))
 import config
 import handlers
 import scheduler
+from core import tools # Registered agent tools
 # Import subsystems to ensure init runs
 import core 
 

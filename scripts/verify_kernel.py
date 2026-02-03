@@ -63,13 +63,14 @@ async def test_fsm_cycle():
 
 async def test_state_guard_blocking():
     print("\n--- 🛡️ TEST 2: State Guard Enforcement ---")
-    guard.force_idle()
+    user_id = 999  # Mock user for testing
+    guard.force_idle(user_id)
     
     # Test 2.1: Action out of state
     try:
-        guard.enter(State.OBSERVE)
+        await guard.enter(user_id, State.OBSERVE)
         print("Current State: OBSERVE. Attempting LLM call (should fail)...")
-        guard.assert_allowed(Action.LLM_CALL)
+        await guard.assert_allowed(user_id, Action.LLM_CALL)
         print("🔴 FAILURE: Guard allowed LLM call in OBSERVE.")
     except PermissionError as e:
         print(f"✅ SUCCESS: Guard blocked action: {e}")
@@ -77,12 +78,12 @@ async def test_state_guard_blocking():
     # Test 2.2: Illegal transition
     try:
         print("Attempting Illegal Transition: OBSERVE -> ACT (skipping PLAN/DECIDE)...")
-        guard.enter(State.ACT)
+        await guard.enter(user_id, State.ACT)
         print("🔴 FAILURE: Guard allowed OBSERVE -> ACT.")
     except RuntimeError as e:
         print(f"✅ SUCCESS: Guard blocked transition: {e}")
         
-    guard.force_idle()
+    guard.force_idle(user_id)
 
 async def main():
     print("🚀 AID KERNEL VERIFICATION SUITE STARTING")

@@ -27,6 +27,10 @@ ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_TELEGRAM_ID", "").split(',') if x.
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
 
+# --- CONCURRENCY CONFIG ---
+STATE_TRANSITION_TIMEOUT = int(os.getenv("STATE_TRANSITION_TIMEOUT", "60"))
+MAX_CONCURRENT_USERS = int(os.getenv("MAX_CONCURRENT_USERS", "500"))
+
 # --- MODEL CONFIGURATION (Google GenAI SDK) ---
 GEMINI_API_VERSION = "v1alpha" 
 MODEL_FAST = "gemini-2.0-flash-lite"      # Tier 1: Super Cheap/Fast

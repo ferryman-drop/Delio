@@ -8,7 +8,7 @@ logger = logging.getLogger("Delio.MemoryWrite")
 
 class MemoryWriteState(BaseState):
     async def execute(self, context: ExecutionContext) -> State:
-        guard.assert_allowed(context.user_id, Action.MEMORY_WRITE)
+        await guard.assert_allowed(context.user_id, Action.MEMORY_WRITE)
         try:
             # Wrap legacy memory saving
             import old_memory as legacy_memory

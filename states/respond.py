@@ -16,7 +16,7 @@ class RespondState(BaseState):
             return State.ERROR
             
         # Deliver response to Telegram (user_id is the chat_id)
-        guard.assert_allowed(context.user_id, Action.NETWORK)
+        await guard.assert_allowed(context.user_id, Action.NETWORK)
         try:
             # Custom iconic footer
             footer = context.metadata.get('model_used', 'AID')

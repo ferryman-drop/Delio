@@ -70,7 +70,7 @@ def resolve_model_alias(tag):
 # --- CORE AI LOGIC ---
 async def call_llm_agentic(user_id, text, system_prompt, preferred='gemini', status_msg=None):
     # ... Copy of call_llm_agentic logic ...
-    guard.assert_allowed(Action.LLM_CALL)
+    await guard.assert_allowed(user_id, Action.LLM_CALL)
     
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     smart_ctx = await memory_manager.get_smart_context(user_id, text)

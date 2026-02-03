@@ -15,6 +15,8 @@ from core.fsm import instance as fsm
 
 logger = logging.getLogger(__name__)
 
+# TODO: Switch to SQLite JobStore for persistence:
+# scheduler = AsyncIOScheduler(jobstores={'default': SQLAlchemyJobStore(url='sqlite:///data/jobs.sqlite')})
 scheduler = AsyncIOScheduler()
 bot_instance = None # Global ref
 
@@ -159,8 +161,7 @@ async def trigger_heartbeat():
         "text": "Check system state and pending tasks."
     })
 
-async def proactive_checkin():
-    pass
+
 
 def init_scheduler(bot=None):
     """Initialize and start the scheduler"""
