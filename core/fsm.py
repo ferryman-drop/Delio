@@ -25,7 +25,8 @@ class FSMController:
         context = ExecutionContext(
             user_id=user_id,
             event_type=event_data.get("type", "message"),
-            raw_input=event_data.get("text", "")
+            raw_input=event_data.get("text", ""),
+            metadata=event_data.get("metadata", {})
         )
         
         logger.info(f"🌀 FSM Starting process for user {user_id} (event: {context.event_type})")

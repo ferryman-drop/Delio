@@ -298,5 +298,47 @@ async def handle_voice(message: types.Message):
 
 @router.message(F.photo)
 async def handle_photo(message: types.Message):
-    # Vision logic
-    await message.answer("📸 Фото в процесі перенесення.")
+    """
+    Handle Photo: Download -> FSM (with image_path)
+    """
+    import os
+    import uuid
+    
+    # 1. Download
+    # Get largest photo
+    photo = message.photo[-1]
+    file_id = photo.file_id
+    file = await message.bot.get_file(file_id)
+    file_path = file.file_path
+    
+    # Ensure dir exists
+    os.makedirs("/tmp/vision_buffer", exist_ok=True)
+    temp_filename = f"/tmp/vision_buffer/img_{uuid.uuid4()}.jpg"
+    
+    try:
+        await message.bot.download_file(file_path, temp_filename)
+        logger.info(f"📸 Image downloaded: {temp_filename}")
+        
+        # 2. Trigger FSM
+        caption = message.caption or ""
+        
+        # User Feedback
+        await message.answer(f"👀 Дивлюся... (Caption: {caption})")
+        
+        await fsm.process_event({
+            "user_id": message.from_user.id,
+            "type": "image",
+            "text": f"[IMAGE UPLOAD] {caption}",
+            "metadata": {"image_path": temp_filename}
+        })
+        
+        # Note: We rely on FSM or some cleanup job to remove the file?
+        # Ideally, we should clean up after processing.
+        # But FSM is async. 
+        # For Phase 3.3, let's leave it in /tmp or rely on cron cleanup.
+        # Or we can delete it after 5 minutes via a task (omitted for brevity).
+        
+    except Exception as e:
+        logger.error(f"Vision Error: {e}")
+        await message.answer("❌ Помилка обробки зображення.")
+

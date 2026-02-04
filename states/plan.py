@@ -28,7 +28,8 @@ class PlanState(BaseState):
                 user_id=context.user_id,
                 text=context.raw_input,
                 system_instruction=system_instruction,
-                preferred_model=preferred
+                preferred_model=preferred,
+                image_path=context.metadata.get("image_path")
             )
             
             # 3. CRITIC PHASE (DeepSeek validation)

@@ -15,6 +15,7 @@ class Action(Enum):
     MEMORY_WRITE = auto()
     MEM_RETRIEVE = auto()
     LLM_CALL = auto()
+    SYSTEM_NOTIFICATION = auto()
 
 class StateGuard:
     def __init__(self):
@@ -24,7 +25,8 @@ class StateGuard:
         
         # Canonical Transitions
         self._allowed_transitions = {
-            State.IDLE: [State.OBSERVE],
+            State.IDLE: [State.OBSERVE, State.NOTIFY],
+            State.NOTIFY: [State.IDLE, State.ERROR],
             State.OBSERVE: [State.RETRIEVE, State.PLAN, State.ERROR],
             State.RETRIEVE: [State.PLAN, State.ERROR],
             State.PLAN: [State.DECIDE, State.ERROR],
@@ -45,7 +47,8 @@ class StateGuard:
             Action.DOCKER: [State.ACT],
             Action.MEMORY_WRITE: [State.MEMORY_WRITE],
             Action.MEM_RETRIEVE: [State.RETRIEVE],
-            Action.LLM_CALL: [State.PLAN, State.REFLECT]
+            Action.LLM_CALL: [State.PLAN, State.REFLECT],
+            Action.SYSTEM_NOTIFICATION: [State.NOTIFY]
         }
 
     async def _get_lock(self, user_id: int) -> asyncio.Lock:
@@ -139,6 +142,26 @@ class StateGuard:
         except asyncio.TimeoutError:
             logger.critical(f"🔒 Lock acquisition timeout for user {user_id}")
             raise RuntimeError(f"Lock acquisition timeout for user {user_id}")
+
+    async def try_enter_notify(self, user_id: int) -> bool:
+        """
+        Try to enter NOTIFY state only if current state is IDLE.
+        Non-blocking (short timeout). Returns True if success.
+        """
+        user_lock = await self._get_lock(user_id)
+        try:
+            async with asyncio.timeout(0.5):
+                await user_lock.acquire()
+            try:
+                if self.get_state(user_id) == State.IDLE:
+                    self._user_states[user_id] = State.NOTIFY
+                    logger.debug(f"➡️ StateGuard [{user_id}]: IDLE -> NOTIFY (System)")
+                    return True
+                return False
+            finally:
+                user_lock.release()
+        except asyncio.TimeoutError:
+            return False
 
     def force_idle(self, user_id: int):
         """Reset the guard to IDLE for a specific user"""

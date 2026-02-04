@@ -1,22 +1,18 @@
+
 import logging
 import asyncio
 import config
 from typing import Tuple, Optional
+import os
 
-# Temporary import until full migration
-# We assume legacy/old_core.py exists. 
-# If 'legacy' is a package, we can import from it.
+# Google GenAI SDK
 try:
-    from legacy import old_core as legacy_core
+    from google import genai
+    from google.genai import types
 except ImportError:
-    try:
-        import old_core as legacy_core
-    except ImportError:
-        import sys
-        import os
-        # Fallback: try adding legacy to path
-        sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../legacy')))
-        import old_core as legacy_core
+    # This might fail if using older environment without new SDK, 
+    # but requirement Phase 3 specified migrating to it.
+    pass
 
 logger = logging.getLogger("Delio.LLMService")
 
@@ -24,24 +20,92 @@ async def call_actor(
     user_id: int,
     text: str,
     system_instruction: str,
-    preferred_model: str = "gemini"
+    preferred_model: str = "gemini",
+    image_path: Optional[str] = None
 ) -> Tuple[str, str]:
     """
-    Викликає Actor модель (Gemini/DeepSeek) через легасі ядро (поки що).
-    Returns: (response_text, model_label)
+    Primary Actor logic. 
+    Supports Image input -> Gemini.
+    Text input -> Gemini (or generic fallback).
     """
     try:
-        # Wrapping legacy call
-        resp_text, model_used = await legacy_core.call_llm_agentic(
-            user_id=user_id,
-            text=text,
-            system_prompt=system_instruction,
-            preferred=preferred_model
+        # Determine real model name based on alias/preference
+        model_name = config.MODEL_BALANCED # default
+        
+        if "pro" in preferred_model: model_name = config.MODEL_SMART
+        elif "flash" in preferred_model: model_name = config.MODEL_FAST
+        
+        logger.info(f"🎤 Calling Actor ({model_name}). Image: {image_path is not None}")
+        
+        client = genai.Client(api_key=config.GEMINI_KEY)
+        
+        # Prepare content list
+        contents = []
+        
+        # 1. Image (if present)
+        if image_path:
+            if not os.path.exists(image_path):
+                logger.warning(f"❌ Image path not found: {image_path}")
+            else:
+                logger.debug(f"📤 Uploading image: {image_path}")
+                try:
+                    # Upload to GenAI File API (for temporal use)
+                    # Note: We could also pass bytes directly if supported, 
+                    # but File API is better for larger files or context caching.
+                    # For simple single-turn, passing PIL image or bytes is often faster/easier 
+                    # but new SDK prefers types.Part or File object.
+                    
+                    # Method A: Client File API
+                    uploaded_file = client.files.upload(file=image_path)
+                    
+                    # Wait for processing if video (images are usually instant)
+                    # But safer to check
+                    if uploaded_file.state == "PROCESSING":
+                        import time
+                        time.sleep(1) 
+                        uploaded_file = client.files.get(name=uploaded_file.name)
+                        
+                    contents.append(uploaded_file)
+                    
+                except Exception as up_err:
+                    logger.error(f"Image upload failed: {up_err}")
+                    # Fallback? Maybe skip image.
+        
+        # 2. Text
+        if text:
+            contents.append(text)
+            
+        if not contents:
+            # Should not happen in normal flow
+            return "Error: Empty input", "Error"
+
+        # 3. Call Generate
+        # We assume stateless call (generate_content) for now, as context history 
+        # is baked into 'system_instruction' or 'contents' by the caller if needed.
+        # However, FSM 'PlanState' passes history in 'system_instruction' as text summary?
+        # Ideally, we should pass history as actual chat history messages.
+        # But for Phase 3.3 Task 007, we stick to the interface: user_raw_input + system_instruction.
+        
+        response = client.models.generate_content(
+            model=model_name,
+            contents=contents,
+            config=types.GenerateContentConfig(
+                system_instruction=system_instruction,
+                temperature=0.7
+            )
         )
-        return resp_text, model_used
+        
+        if not response.text:
+            return " Error: Empty response from model.", model_name
+            
+        return response.text, model_name
+
     except Exception as e:
-        logger.error(f"LLM Actor failed: {e}")
-        raise
+        logger.error(f"❌ Actor Error: {e}")
+        # Fallback to text-only if image failed? or DeepSeek?
+        # For now, propagate error
+        raise e
+
 
 async def call_critic(
     user_query: str,
@@ -49,10 +113,10 @@ async def call_critic(
     instruction: str
 ) -> Tuple[str, str]:
     """
-    Викликає Critic модель (DeepSeek) для валідації.
+    Critic logic (DeepSeek) to validate Actor response.
     """
     try:
-        # We perform lazy import of OpenAI to avoid overhead if not used/installed in other envs
+        # Lazy import openai
         try:
             from openai import OpenAI
         except ImportError:
@@ -70,9 +134,7 @@ async def call_critic(
 3. Звертай увагу на точність фактів та відповідність Life Level користувача.
 
 ІНСТРУКЦІЯ АКТОРУ:
-{instruction[:500]}... (truncated)
-
-{config.TELEGRAM_STYLE}
+{instruction[:2000]}... (truncated)
 
 ЗАПИТ КОРИСТУВАЧА:
 {user_query}
@@ -94,7 +156,7 @@ async def call_critic(
         if "✅ VALIDATED" in critic_output or "VALIDATED" in critic_output:
             # Clean up the label from response if it leaked
             clean_resp = critic_output.replace("✅ VALIDATED", "").replace("VALIDATED", "").strip()
-            if not clean_resp: # If it was just the label
+            if not clean_resp or len(clean_resp) < 5: # If it was just the label
                 return actor_response, "♊"
             return clean_resp, "♊+🐋"
             

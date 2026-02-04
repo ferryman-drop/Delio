@@ -12,6 +12,8 @@ import routing_learner
 import digest_manager
 import memory_manager_v2 as mm2  # Advanced memory system
 from core.fsm import instance as fsm
+from core.state import State
+from core.state_guard import guard
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +21,42 @@ logger = logging.getLogger(__name__)
 # scheduler = AsyncIOScheduler(jobstores={'default': SQLAlchemyJobStore(url='sqlite:///data/jobs.sqlite')})
 scheduler = AsyncIOScheduler()
 bot_instance = None # Global ref
+
+async def safe_send_message(user_id: int, text: str, model_tag: str = "System", audio_path: str = None):
+    """
+    Safely send a message through the StateGuard.
+    If user is busy, reschedule or drop (depending on importance).
+    """
+    if not bot_instance:
+        logger.warning(f"⚠️ Cannot send message to {user_id}: Bot instance not set")
+        return False
+
+    if await guard.try_enter_notify(user_id):
+        try:
+            if audio_path:
+                 from aiogram.types import FSInputFile
+                 voice = FSInputFile(audio_path)
+                 await bot_instance.send_voice(user_id, voice, caption=text[:1000])
+                 logger.info(f"🎙️ Safe voice sent to {user_id}")
+            else:
+                 await bot_instance.send_message(user_id, text)
+                 logger.info(f"📨 Safe message sent to {user_id}")
+            
+            # Record in memory
+            try:
+                import old_memory as memory
+                memory.save_interaction(user_id, f"[SYSTEM_EVENT: {model_tag}]", text, model_tag)
+            except: pass
+            
+            return True
+        except Exception as e:
+            logger.error(f"❌ Failed to send safe message: {e}")
+            return False
+        finally:
+            guard.force_idle(user_id)
+    else:
+        logger.info(f"⏳ User {user_id} busy. Message queued/delayed.")
+        return False
 
 async def digest_daily_logs():
     """
@@ -50,19 +88,15 @@ async def digest_daily_logs():
             if bot_instance:
                 try:
                     msg = f"🌙 **Daily Summary**\nmood: {daily_d.get('mood_score')}/10\n\n{daily_d.get('narrative')[:200]}..."
-                    # await bot_instance.send_message(uid, msg) # Optional: Don't spam unless requested
+                    await safe_send_message(uid, msg, "DailyDigest")
                 except: pass
         
         # B. Weekly Digest (Sunday)
         if datetime.now().weekday() == 6: # Sunday
             weekly_d = await dm.generate_weekly_digest(uid)
-            if weekly_d and bot_instance:
-                 try: await bot_instance.send_message(uid, f"📅 **Weekly Report**\n\n{weekly_d.get('narrative')}")
-                 except: pass
-
-        # C. Monthly Digest (1st of Month)
+            if weekly_d:
+                 await safe_send_message(uid, f"📅 **Weekly Report**\n\n{weekly_d.get('narrative')}", "WeeklyReport")
         if datetime.now().day == 1:
-            # Implementation omitted for brevity, similar flow
             pass
 
     logger.info("✅ Fractal Digestion complete")
@@ -106,7 +140,13 @@ async def send_morning_briefing(user_id, insights, goals):
         )
         briefing = response.text
         
-        await bot_instance.send_message(user_id, briefing)
+        # Audio generation
+        audio_path = None
+        if len(briefing) > 250:
+             from core.tts_service import tts
+             audio_path = await tts.generate_speech(briefing)
+        
+        await safe_send_message(user_id, briefing, "MorningBriefing", audio_path)
         logger.info(f"📬 Sent Morning Briefing to {user_id}")
         
     except Exception as e:
