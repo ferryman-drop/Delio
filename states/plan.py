@@ -74,7 +74,8 @@ class PlanState(BaseState):
             
             # 1. Check for Critic Rejection
             synergy_label = context.metadata.get("model_used", "")
-            if "⚠️" in synergy_label:
+            # Route to ERROR only if it's a REAL rejection/error, NOT a simple API timeout
+            if "⚠️" in synergy_label and "(Timeout)" not in synergy_label:
                 logger.warning(f"⛔ Plan Rejected by Critic. User: {context.user_id}")
                 context.errors.append("Critic rejected the response (Potential Safety/Logic Issue)")
                 return State.ERROR
@@ -135,7 +136,45 @@ class PlanState(BaseState):
             # Generally, we want to clear tool_calls so we don't re-execute them
             context.tool_calls = []
 
+        # --- IMAGE CONTEXT ---
+        if context.metadata.get("image_path"):
+            instruction_parts.append("\n### [СИГНАЛ: ЗОБРАЖЕННЯ]")
+            instruction_parts.append("Користувач надіслав зображення. Аналізуй його першочергово та надай детальну відповідь на основі візуальних даних.")
+            if context.raw_input and "[IMAGE UPLOAD]" in context.raw_input:
+                # If it's a raw upload without specific question beyond caption
+                instruction_parts.append("Мета користувача: Дізнатись, що на фото.")
+
+        # --- HEARTBEAT CONTEXT ---
+        if context.event_type == "heartbeat":
+            instruction_parts.append("\n### [СИГНАЛ: HEARTBEAT CHECK-IN]")
+            instruction_parts.append("Цей запит ініційовано автоматично (Proactive Heartbeat). Твоя задача — перевірити контекст користувача (цілі, час, нагадування).")
+            instruction_parts.append("1. Якщо є щось КРИТИЧНО ВАЖЛИВЕ або КОРИСНЕ (нагадування, мотивація, питання по цілі) — напиши це.")
+            instruction_parts.append("2. Якщо нічого важливого немає — просто виведи слово 'SKIP'.")
+            instruction_parts.append("3. НЕ вітайся, якщо в цьому немає потреби. НЕ пиши 'Як справи?', якщо немає контексту.")
+            instruction_parts.append("Bias towards SILENCE (SKIP). Speak only when valuable.")
+
         instruction_parts.append("\n### ТВОЇ ОСНОВНІ ІНСТРУКЦІЇ:")
+
+        # --- ACTIVE REFLECTION (Task-012) ---
+        try:
+            import sqlite3
+            conn = sqlite3.connect('/root/ai_assistant/data/bot_data.db')
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT critique, correction FROM lessons_learned 
+                WHERE user_id = ? AND score < 7 
+                ORDER BY created_at DESC LIMIT 3
+            """, (context.user_id,))
+            lessons = cursor.fetchall()
+            conn.close()
+            
+            if lessons:
+                instruction_parts.append("\n### ⚠️ CRITICAL LEARNINGS FROM PAST MISTAKES:")
+                for idx, (critique, correction) in enumerate(lessons):
+                    instruction_parts.append(f"{idx+1}. Issue: {critique} -> Fix: {correction}")
+                instruction_parts.append("DO NOT REPEAT THESE ERRORS.")
+        except Exception:
+            pass # Fail silently
         instruction_parts.append(config.SYSTEM_PROMPT)
         instruction_parts.append("\n" + config.TELEGRAM_STYLE)
         

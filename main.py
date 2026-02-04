@@ -42,6 +42,7 @@ async def main():
     from states.respond import RespondState
     from states.reflect import ReflectState
     from states.memory_write import MemoryWriteState
+    from states.error import ErrorState
 
     fsm.register_handler(State.OBSERVE, ObserveState())
     fsm.register_handler(State.RETRIEVE, RetrieveState())
@@ -51,6 +52,7 @@ async def main():
     fsm.register_handler(State.RESPOND, RespondState(bot))
     fsm.register_handler(State.REFLECT, ReflectState())
     fsm.register_handler(State.MEMORY_WRITE, MemoryWriteState())
+    fsm.register_handler(State.ERROR, ErrorState(bot))
     logger.info("✅ AID Kernel (FSM) initialized")
 
     # Init Advanced Memory System (V2)

@@ -34,7 +34,7 @@ class StateGuard:
             State.ACT: [State.REFLECT, State.ERROR],
             State.RESPOND: [State.REFLECT, State.ERROR],
             State.SCHEDULE: [State.REFLECT, State.ERROR],
-            State.REFLECT: [State.MEMORY_WRITE, State.ERROR],
+            State.REFLECT: [State.MEMORY_WRITE, State.PLAN, State.ERROR],
             State.MEMORY_WRITE: [State.IDLE, State.ERROR],
             State.ERROR: [State.IDLE]
         }

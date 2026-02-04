@@ -16,7 +16,13 @@ class DecideState(BaseState):
 
         # 2. Check for heartbeat/background triggers
         if context.event_type == "heartbeat":
-            logger.info("🤖 Autonomy trigger detected in DECIDE")
-            return State.ACT
+            # If model said SKIP (or variations like "SKIP." or "Skip"), go IDLE.
+            resp_clean = context.response.strip().upper()
+            if "SKIP" in resp_clean and len(resp_clean) < 10:
+                logger.info(f"🤐 Heartbeat SKIPPED for user {context.user_id}")
+                return State.IDLE
+            
+            logger.info("🤖 Autonomy trigger detected in DECIDE (Active Message)")
+            return State.RESPOND
             
         return State.RESPOND

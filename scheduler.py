@@ -4,6 +4,7 @@ import sqlite3
 import json
 import os
 from datetime import datetime, timedelta
+import config
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 import memory_manager
@@ -193,13 +194,40 @@ async def apply_memory_decay_all_users():
 async def trigger_heartbeat():
     """
     Periodic heartbeat that enters the FSM for autonomous background tasks.
+    Only triggers for active users who are currently IDLE.
     """
     logger.debug("💓 Triggering FSM Heartbeat")
-    await fsm.process_event({
-        "user_id": 0, # System user
-        "type": "heartbeat",
-        "text": "Check system state and pending tasks."
-    })
+    
+    # 1. Get Active Users (Last 48h to be generous)
+    try:
+        conn = sqlite3.connect('data/chat_history.db')
+        cursor = conn.cursor()
+        since = (datetime.now() - timedelta(hours=48)).strftime('%Y-%m-%d %H:%M:%S')
+        cursor.execute("SELECT DISTINCT user_id FROM messages WHERE timestamp > ?", (since,))
+        users = [r[0] for r in cursor.fetchall()]
+        conn.close()
+    except Exception as e:
+        logger.error(f"❌ Failed to fetch users for heartbeat: {e}")
+        users = []
+
+    if not users:
+        logger.debug("ℹ️ No active users for heartbeat.")
+        return
+
+    for user_id in users:
+        # 2. Check State (Skip if busy)
+        state = guard.get_state(user_id)
+        if state != State.IDLE:
+            logger.debug(f"⏳ Skipping heartbeat for {user_id} (State: {state.name})")
+            continue
+            
+        # 3. Trigger FSM
+        logger.info(f"💓 Heartbeat Check-in for user {user_id}")
+        await fsm.process_event({
+            "user_id": user_id,
+            "type": "heartbeat",
+            "text": "[SYSTEM_HEARTBEAT] Check context. If no critical action needed, reply 'SKIP'."
+        })
 
 
 
@@ -232,10 +260,10 @@ def init_scheduler(bot=None):
             replace_existing=True
         )
         
-        # Schedule a real FSM heartbeat every 15 minutes
+        # Schedule a real FSM heartbeat using config
         scheduler.add_job(
             trigger_heartbeat,
-            CronTrigger(minute="0,15,30,45"),
+            CronTrigger(minute=f"*/{config.HEARTBEAT_INTERVAL_MINUTES}"),
             id="fsm_heartbeat",
             replace_existing=True
         )

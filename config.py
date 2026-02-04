@@ -19,6 +19,7 @@ except Exception as e:
 TG_TOKEN = os.getenv("TG_TOKEN")
 GEMINI_KEY = os.getenv("GEMINI_KEY")
 DEEPSEEK_KEY = os.getenv("DEEPSEEK_KEY")
+ANTHROPIC_KEY = os.getenv("ANTHROPIC_KEY")
 MAX_HISTORY = int(os.getenv("MAX_HISTORY", "10"))
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "30"))
@@ -26,6 +27,7 @@ RATE_LIMIT_PERIOD = int(os.getenv("RATE_LIMIT_PERIOD", "60"))
 ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_TELEGRAM_ID", "").split(',') if x.strip()]
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+HEARTBEAT_INTERVAL_MINUTES = int(os.getenv("HEARTBEAT_INTERVAL_MINUTES", "30"))
 
 # --- CONCURRENCY CONFIG ---
 STATE_TRANSITION_TIMEOUT = int(os.getenv("STATE_TRANSITION_TIMEOUT", "60"))
@@ -36,6 +38,7 @@ GEMINI_API_VERSION = "v1alpha"
 MODEL_FAST = "gemini-2.0-flash-lite"      # Tier 1: Super Cheap/Fast
 MODEL_BALANCED = "gemini-2.0-flash"       # Tier 2: The Workhorse
 MODEL_SMART = "gemini-2.5-pro"            # Tier 3: Complex Reasoning
+MODEL_JUDGE = "claude-3-5-sonnet-latest"  # Tier 4: The Wise Judge
 
 # Synergy Mode: Gemini generates → DeepSeek analyzes/improves
 ENABLE_SYNERGY = os.getenv("ENABLE_SYNERGY", "true").lower() == "true"

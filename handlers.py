@@ -323,7 +323,7 @@ async def handle_photo(message: types.Message):
         caption = message.caption or ""
         
         # User Feedback
-        await message.answer(f"👀 Дивлюся... (Caption: {caption})")
+        await message.answer("📸 *Аналізую зображення...*")
         
         await fsm.process_event({
             "user_id": message.from_user.id,
