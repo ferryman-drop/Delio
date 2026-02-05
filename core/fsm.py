@@ -1,7 +1,7 @@
 import logging
 import asyncio
 from core.state import State
-from core.context import ExecutionContext
+from core.context import ExecutionContext, trace_var
 from core.state_guard import guard
 
 MAX_TRANSITIONS = 20
@@ -28,6 +28,9 @@ class FSMController:
             raw_input=event_data.get("text", ""),
             metadata=event_data.get("metadata", {})
         )
+        
+        # Set Trace Context
+        token = trace_var.set(context.trace_id)
         
         logger.info(f"🌀 FSM Starting process for user {user_id} (event: {context.event_type})")
         context.add_trace("START")
@@ -92,6 +95,7 @@ class FSMController:
         finally:
             guard.force_idle(user_id)
             guard.cleanup_user_lock(user_id)  # NEW: звільнити lock після завершення
+            trace_var.reset(token)
             
         return context
 

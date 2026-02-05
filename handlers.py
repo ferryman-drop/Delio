@@ -279,7 +279,12 @@ async def handle_voice(message: types.Message):
              
         # Process Refinement (Legacy)
         refined_text = await legacy_core.refine_text_with_deepseek(raw_text)
-        await message.answer(f"📝 *Розпізнано та очищено:*\n\n{refined_text}")
+        
+        # Audio Insight Threshold (Task-013 Zone 2)
+        if message.voice.duration >= 30:
+            await message.answer(f"📝 *Розпізнано та очищено:*\n\n{refined_text}")
+        else:
+            logger.info(f"🔇 Voice duration {message.voice.duration}s < 30s. Skipping transcript block.")
 
         # Deliver via FSM
         await fsm.process_event({

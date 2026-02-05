@@ -62,8 +62,24 @@ class ContextFunnel:
                 # Use old_core.get_cached_context which accesses Redis
                 history = old_core.get_cached_context(user_id)
                 # History is usually a list of strings [text1, text2...]
-                # We take the last 10
-                context_data["short_term"] = history[-10:] if history else []
+                # --- TOKEN BUDGETING (Fix for "Context Overflow") ---
+                # Simple approximation: 1 token ~= 4 chars
+                # We want max ~1000 tokens for short term (~4000 chars)
+                budget = 4000
+                current_chars = 0
+                selected_history = []
+                
+                # Iterate backwards (newest first)
+                if history:
+                    for msg in reversed(history):
+                        msg_len = len(msg)
+                        if current_chars + msg_len > budget:
+                            break
+                        selected_history.insert(0, msg) # Prepend to keep chronological order
+                        current_chars += msg_len
+                
+                context_data["short_term"] = selected_history
+                # ----------------------------------------------------
             except Exception as e:
                 logger.warning(f"⚠️ Redis fetch (Short-Term) failed: {e}")
         else:

@@ -169,13 +169,37 @@ async def call_critic(
         
         critic_output = response.choices[0].message.content
         
-        if "✅ VALIDATED" in critic_output or "VALIDATED" in critic_output:
-            # Clean up the label from response if it leaked
+        # --- STRICT CLEANING PROTOCOL (Fix for leaking "CRITIC CONCLUSION") ---
+        # 1. If VALIDATED, just strip the tag
+        if "VALIDATED" in critic_output:
             clean_resp = critic_output.replace("✅ VALIDATED", "").replace("VALIDATED", "").strip()
-            if not clean_resp or len(clean_resp) < 5: # If it was just the label
+            # If nothing remains, it means the Critic just said "Validated" -> Stick to Actor
+            if not clean_resp or len(clean_resp) < 5:
                 return actor_response, "♊"
             return clean_resp, "♊+🐋"
-            
+
+        # 2. If REJECTED/CORRECTED, we need to extract ONLY the final response
+        # The prompt asks for "**ПОКРАЩЕНА ВІДПОВІДЬ:**" or just the text.
+        # We must strip everything before the final text.
+        
+        markers = ["**ПОКРАЩЕНА ВІДПОВІДЬ:**", "**IMPROVED RESPONSE:**", "### RESPONSE"]
+        for marker in markers:
+            if marker in critic_output:
+                # Take everything AFTER the marker
+                try:
+                    final_part = critic_output.split(marker)[-1].strip()
+                    if final_part:
+                        return final_part, "♊+🐋"
+                except:
+                    pass
+        
+        # 3. Fallback: If no markers, but it's a correction, 
+        # sadly we might leak the critique unless we return Actor's text.
+        # Better safe than sorry: If we can't parse the improvement, use Actor's original.
+        if "**ВИСНОВОК" in critic_output or "**CONCLUSION" in critic_output:
+            logger.warning("⚠️ Critic output format invalid (leaked internal headers). Reverting to Actor.")
+            return actor_response, "♊"
+
         return critic_output, "♊+🐋 (Corrected)"
         
     except Exception as e:

@@ -14,8 +14,9 @@ from core import tools # Registered agent tools
 # Import subsystems to ensure init runs
 import core 
 
-# Setup Logging (already done in config.py)
-logger = logging.getLogger("Delio")
+import core.logger
+# Setup Logging
+logger = core.logger.setup_logging("logs/delio_trace.json", level=config.LOG_LEVEL)
 
 async def main():
     import os
@@ -65,6 +66,10 @@ async def main():
     memory_populator.init_memory_populator(structured_memory)
     model_control.init_model_controller(structured_memory)
     logger.info("✅ Advanced Memory System (V2) initialized")
+    
+    # Register Bot for Critical Alerts (Task-014)
+    from core.state_guard import guard
+    guard.set_bot(bot)
     
     # Set Bot Commands (Menu)
     from aiogram.types import BotCommand

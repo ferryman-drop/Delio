@@ -78,6 +78,20 @@ class StateGuard:
     def get_state(self, user_id: int) -> State:
         return self._user_states.get(user_id, State.IDLE)
 
+
+    def set_bot(self, bot_instance):
+        """Set bot instance for critical alerts."""
+        self._bot = bot_instance
+
+    async def _send_alert(self, user_id: int, error: Exception, context: str):
+        """Fire-and-forget alert to admin."""
+        if hasattr(self, '_bot') and self._bot and config.ADMIN_IDS:
+            try:
+                msg = f"🚨 **CRITICAL GUARD FAILURE**\nContext: {context}\nUser: `{user_id}`\nError: `{type(error).__name__}: {str(error)}`"
+                await self._bot.send_message(config.ADMIN_IDS[0], msg, parse_mode="Markdown")
+            except Exception as e:
+                logger.error(f"Failed to send alert: {e}")
+
     async def enter(self, user_id: int, next_state: State):
         """
         Attempt to transition to a new state for a specific user.
@@ -104,6 +118,9 @@ class StateGuard:
                 if next_state not in allowed:
                     msg = f"❌ FORBIDDEN TRANSITION for {user_id}: {current_state.name} -> {next_state.name}"
                     logger.error(msg)
+                    # Alert Admin
+                    await self._send_alert(user_id, RuntimeError(msg), "Forbidden Transition")
+                    
                     self._user_states[user_id] = State.ERROR
                     raise RuntimeError(msg)
 
@@ -114,9 +131,15 @@ class StateGuard:
                     
         except asyncio.TimeoutError:
             logger.critical(f"🔒 DEADLOCK DETECTED for user {user_id}! Lock acquisition timeout after {config.STATE_TRANSITION_TIMEOUT}s")
-            # Ми НЕ змінюємо state тут, бо не маємо lock. 
-            # FSM.process_event має finally блок, який зробить force_idle()
+            # Alert Admin
+            await self._send_alert(user_id, RuntimeError("Deadlock/Timeout"), "Lock Acquisition")
             raise RuntimeError(f"Lock acquisition timeout for user {user_id}")
+        except Exception as e:
+            # Catch-all for other unexpected errors during transition
+             if isinstance(e, RuntimeError) and "FORBIDDEN" in str(e):
+                 raise e
+             await self._send_alert(user_id, e, "Unexpected State Transition Error")
+             raise e
 
     async def assert_allowed(self, user_id: int, action: Action):
         """
@@ -135,12 +158,15 @@ class StateGuard:
                 if current_state not in allowed_states:
                     msg = f"🛡️ STATE GUARD BLOCK [{user_id}]: Action {action.name} is FORBIDDEN in {current_state.name}"
                     logger.critical(msg)
+                    # Alert Admin
+                    await self._send_alert(user_id, PermissionError(msg), f"Action Blocked: {action.name}")
                     raise PermissionError(msg)
             finally:
                 user_lock.release()
                 
         except asyncio.TimeoutError:
             logger.critical(f"🔒 Lock acquisition timeout for user {user_id}")
+            await self._send_alert(user_id, RuntimeError("Lock Timeout"), f"Action Check: {action.name}")
             raise RuntimeError(f"Lock acquisition timeout for user {user_id}")
 
     async def try_enter_notify(self, user_id: int) -> bool:

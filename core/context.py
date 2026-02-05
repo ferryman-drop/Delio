@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Dict, List, Any, Optional
 from datetime import datetime
+from contextvars import ContextVar
+
+trace_var: ContextVar[Optional[str]] = ContextVar("trace_id", default=None)
 
 @dataclass
 class ExecutionContext:
@@ -8,6 +11,7 @@ class ExecutionContext:
     event_type: str = "message"
     raw_input: str = ""
     start_time: datetime = field(default_factory=datetime.now)
+    trace_id: str = field(default_factory=lambda: str(__import__('uuid').uuid4()))
     
     # State-specific data
     metadata: Dict[str, Any] = field(default_factory=dict)

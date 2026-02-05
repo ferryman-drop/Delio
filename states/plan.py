@@ -51,7 +51,28 @@ class PlanState(BaseState):
                 context.metadata["model_used"] = icon
 
             # 4. PARSE TOOL CALLS (JSON Extraction)
-            context.tool_calls = self._extract_tool_calls(final_text)
+            # --- ROBUST JSON PARSER (Fix for "Regex Trap") ---
+            try:
+                # Find the first '{' and last '}'
+                start_idx = final_text.find('{')
+                end_idx = final_text.rfind('}')
+                
+                if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+                    json_str = final_text[start_idx:end_idx+1]
+                    # Sanitize common LLM mistakes (like trailing commas)
+                    # For now, rely on stdlib, but could upgrade to json_repair
+                    data = json.loads(json_str)
+                    
+                    if "tool_calls" in data:
+                        context.tool_calls = data["tool_calls"]
+                    else:
+                        context.tool_calls = [] # Valid JSON but no tool calls
+                else:
+                    context.tool_calls = [] # No JSON found
+                    
+            except json.JSONDecodeError as e:
+                logger.warning(f"⚠️ JSON Parse Error: {e}. Raw text: {final_text[:100]}...")
+                context.tool_calls = [] # Fallback to text-only
             
             # Clean response text from JSON for display (optional, depending on UX)
             context.response = self._cleanup_response(final_text)
@@ -140,9 +161,14 @@ class PlanState(BaseState):
         if context.metadata.get("image_path"):
             instruction_parts.append("\n### [СИГНАЛ: ЗОБРАЖЕННЯ]")
             instruction_parts.append("Користувач надіслав зображення. Аналізуй його першочергово та надай детальну відповідь на основі візуальних даних.")
+            instruction_parts.append("ФОРМАТ ВІДПОВІДІ (ОБОВ'ЯЗКОВО розділяй подвійним переносом рядка):")
+            instruction_parts.append("1. [Короткий візуальний опис]")
+            instruction_parts.append("\n\n2. [Твоя інтерпретація, філософський зв'язок або імпровізація]")
+            instruction_parts.append("\n\n3. [Заклик до дії або стратегічна порада]")
+            
             if context.raw_input and "[IMAGE UPLOAD]" in context.raw_input:
                 # If it's a raw upload without specific question beyond caption
-                instruction_parts.append("Мета користувача: Дізнатись, що на фото.")
+                instruction_parts.append("Мета користувача: Дізнатись, що на фото та почути твою думку.")
 
         # --- HEARTBEAT CONTEXT ---
         if context.event_type == "heartbeat":

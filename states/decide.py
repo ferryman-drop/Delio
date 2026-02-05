@@ -18,7 +18,10 @@ class DecideState(BaseState):
         if context.event_type == "heartbeat":
             # If model said SKIP (or variations like "SKIP." or "Skip"), go IDLE.
             resp_clean = context.response.strip().upper()
-            if "SKIP" in resp_clean and len(resp_clean) < 10:
+            
+            # STRICT FILTER: Any response starting with SKIP is a SKIP.
+            # Covers "SKIP", "SKIP: No changes", "SKIP.", etc.
+            if resp_clean.startswith("SKIP"):
                 logger.info(f"🤐 Heartbeat SKIPPED for user {context.user_id}")
                 return State.IDLE
             
