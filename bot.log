@@ -237,3 +237,32 @@ RuntimeWarning: Enable tracemalloc to get the object allocation traceback
 2026-02-05 22:38:12,609 - Delio.Respond - INFO - 📤 Sending fragmented response to 403314201 (6 chunks)
 2026-02-05 22:38:23,938 - Delio.FSM - CRITICAL - ⏰ FSM Execution Timed Out (30s) for user 403314201
 2026-02-05 22:38:23,939 - aiogram.event - INFO - Update id=950762279 is handled. Duration 30009 ms by bot id=8316389694
+2026-02-05 23:00:00,007 - apscheduler.executors.default - INFO - Running job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-05 23:30:00 UTC)" (scheduled at 2026-02-05 23:00:00+00:00)
+2026-02-05 23:00:00,017 - scheduler - INFO - 💓 Heartbeat Check-in for user 999999
+2026-02-05 23:00:00,018 - Delio.FSM - INFO - 🌀 FSM Starting process for user 999999 (event: heartbeat)
+2026-02-05 23:00:00,394 - old_memory - ERROR - ❌ Embedding error (retrieval_query): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/text-embedding-004 is not found for API version v1beta, or is not supported for embedContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+2026-02-05 23:00:00,397 - Delio.MemoryFunnel - INFO - ✅ Funnel complete. Short: 0, Long: 0
+2026-02-05 23:00:00,402 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-05 23:00:00,704 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-05 23:00:01,338 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: SKIP
+...
+2026-02-05 23:00:02,796 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-05 23:00:02,859 - Delio.Decide - INFO - 🤐 Heartbeat SKIPPED for user 999999
+2026-02-05 23:00:02,860 - Delio.StateGuard - ERROR - ❌ FORBIDDEN TRANSITION for 999999: DECIDE -> IDLE
+2026-02-05 23:00:02,945 - Delio.StateGuard - ERROR - Failed to send alert: Telegram server says - Bad Request: chat not found
+2026-02-05 23:00:02,946 - Delio.FSM - ERROR - 💥 Error in state State.DECIDE for user 999999: ❌ FORBIDDEN TRANSITION for 999999: DECIDE -> IDLE
+Traceback (most recent call last):
+  File "/root/ai_assistant/core/fsm.py", line 78, in process_event
+    try:
+        ^
+  File "/root/ai_assistant/core/state_guard.py", line 140, in enter
+    raise e
+  File "/root/ai_assistant/core/state_guard.py", line 125, in enter
+    raise RuntimeError(msg)
+RuntimeError: ❌ FORBIDDEN TRANSITION for 999999: DECIDE -> IDLE
+2026-02-05 23:00:02,948 - Delio.StateGuard - WARNING - ⚠️ Emergency transition to ERROR for 999999 from State.ERROR
+2026-02-05 23:00:02,948 - Delio.Error - ERROR - 🚨 Handling ERROR state for user 999999
+2026-02-05 23:00:02,948 - Delio.Error - ERROR - Errors: ['❌ FORBIDDEN TRANSITION for 999999: DECIDE -> IDLE']
+2026-02-05 23:00:03,007 - Delio.Error - ERROR - Failed to send error message: Telegram server says - Bad Request: chat not found
+2026-02-05 23:00:03,009 - Delio.FSM - INFO - ✅ FSM Processed user 999999. Trace: ['2026-02-05T23:00:00.019025 - START', '2026-02-05T23:00:00.019406 - OBSERVE', '2026-02-05T23:00:00.019544 - RETRIEVE', '2026-02-05T23:00:00.400012 - PLAN', '2026-02-05T23:00:02.859672 - DECIDE', '2026-02-05T23:00:02.948699 - ERROR']
+2026-02-05 23:00:03,010 - apscheduler.executors.default - INFO - Job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-05 23:30:00 UTC)" executed successfully

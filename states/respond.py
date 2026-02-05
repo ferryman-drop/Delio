@@ -54,7 +54,7 @@ class RespondState(BaseState):
             sent = False
             for attempt in range(max_retries):
                 try:
-                    await self.bot.send_message(context.user_id, final_chunk)
+                    await self.bot.send_message(context.user_id, final_chunk, parse_mode="Markdown")
                     sent = True
                     break
                 except Exception as e:

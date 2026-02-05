@@ -50,6 +50,13 @@ _Що сьогодні робимо? Вибирай команду або про
 
     await message.answer(msg, reply_markup=kb, parse_mode="Markdown")
 
+@router.message(Command("next", "далі"))
+async def cmd_next(message: types.Message):
+    """Trigger the next step in the conversation."""
+    user_id = message.from_user.id
+    # We treat this as a user message "Continue", but clearer for the bot
+    await fsm.handle_event(user_id, "message", "Continue. Provide the next logical step or detail. Do not repeat yourself.")
+
 @router.message(Command("memory"))
 async def cmd_memory(message: types.Message):
     """Show detailed memory snapshot."""

@@ -120,7 +120,12 @@ class PlanState(BaseState):
         instruction_parts = [
             f"Ти — {config.yaml_config.get('bot', {}).get('name', 'Delio')}, персональний AI-асистент (AID).",
             "Ти працюєш згідно зі своєю конституцією (FSM State Machine).\n",
-            "### ВАШ ПРОФІЛЬ ТА КОНТЕКСТ ЖИТТЯ:"
+            "### RULES OF ENGAGEMENT (STRICT):",
+            "1. **FORMATTING**: Use Telegram Markdown. Use `*bold*` for bold. NEVER use `**` or `__`. Use `_italic_`.",
+            "2. **VERBOSITY**: Do not overwhelm. If the answer is long, provide the Key Insight and say 'Тисни /next для деталей'.",
+            "3. **ANTI-BOMBARDMENT**: Ask MAXIMUM 1 question per response. Never ask 3-4 questions at once.",
+            "4. **MATURITY**: Act as a Senior Partner. Don't ask 'Can I help?'. Assume the goal and act.",
+            "\n### ВАШ ПРОФІЛЬ ТА КОНТЕКСТ ЖИТТЯ:"
         ]
         
         structured = mem.get("structured_profile", {})
