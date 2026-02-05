@@ -1,21 +1,46 @@
-# 🛡️ Delio Project
+# 🌧️ Delio (v4.1)
 
-A modular framework for managing high-latency asynchronous event streams with state persistence and structured response protocols.
+> **"Not just a bot. A Life OS."**
 
-## 🏗️ System Overview
+Delio is an advanced AI assistant framework designed for personal strategy, focus management, and intellectual resonance. It operates as a high-latency, persistent FSM (Finite State Machine) that doesn't just reply — it **thinks**, **plans**, and **acts**.
 
-The project implements a state-based protocol handler designed for robust event processing and multi-layered context management.
+## 🧠 The Nucleus (Core Architecture)
 
-### Component Layout
-- `core/`: Core logic and system orchestration.
-- `states/`: Behavioral handlers for event cycles.
-- `tools/`: Extensible functional modules.
-- `docs/`: Technical specifications and internal guides.
+*   **Triumvirate Intelligence**: Combines **Gemini 1.5 Pro** (Actor), **DeepSeek V3** (Critic), and **Claude 3.5 Sonnet** (Judge).
+*   **Persistent Memory**: 
+    *   Redis (Short-term context)
+    *   ChromaDB (Long-term semantic recall)
+    *   SQLite (Structured "Life Profile")
+*   **State Machine**: A rigorous FSM (`IDLE` -> `THINK` -> `PLAN` -> `ACT`) prevents hallucination loops.
 
-## 🚀 Deployment
+## ⭐ Key Features (Phase 4.1)
 
-Refer to the internal technical documentation in the `docs/` directory for detailed setup, environment configuration, and operational procedures.
+1.  **Resonance UX**: It feels alive. It pulses with a "Heartbeat" to check on you if you're silent.
+2.  **Maturity Protocol**: Adapts to your level. Senior-level brevity by default. Use `/more` for deep dives.
+3.  **Kernel Hardening**: 
+    *   Trace IDs for every thought.
+    *   Admin Alerts on Telegram for critical errors.
+    *   Robust JSON parsing and memory budgeting.
+
+## 🛠️ Deployment
+
+```bash
+# 1. Clone & Config
+git clone https://github.com/ferryman-drop/delio-core.git
+cp config.example.yaml config.yaml
+
+# 2. Run with Docker
+docker-compose up -d --build
+
+# 3. Awaken
+# Send /start in Telegram
+```
+
+## 📜 Documentation
+
+- [Roadmap](docs/MASTER_ROADMAP.md) - The future of Delio.
+- [Development Plan](docs/DEVELOPMENT_PLAN.md) - Current status.
+- [Hardening Report](docs/TASK_014_HARDENING_REPORT.md) - Security details.
 
 ---
-**Version:** 2.5.0-Stable
-**License:** Private / Proprietary
+*Powered by Ferryman Drop.*

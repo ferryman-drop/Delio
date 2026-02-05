@@ -133,17 +133,25 @@ async def call_critic(
 
         ds_client = OpenAI(api_key=config.DEEPSEEK_KEY, base_url="https://api.deepseek.com")
         
+        # Enforce a strict separator for parsing
+        SEPARATOR = "@@@FINAL_RESPONSE@@@"
+        
         synergy_prompt = f"""[ACTOR-CRITIC SYNERGY] 
 Ти — AID Critic (DeepSeek). Твоя задача — проаналізувати відповідь AID Actor (Gemini).
 
 ПРАВИЛА:
 1. Якщо відповідь правильна, логічна та безпечна — поверни статус: "✅ VALIDATED" і саму відповідь без затримок.
-2. Якщо є помилки, логічні прогалини або відхилення від інструкцій — надай ТІЛЬКИ покращену версію відповіді.
-3. Звертай увагу на точність фактів та відповідність Life Level користувача.
-4. ВИНЯТОК: Якщо користувач надіслав ЗОБРАЖЕННЯ (Image/Photo), Актор (Gemini) зобов'язаний описати, що він бачить. Це ВАЛІДНА поведінка.
+2. Якщо є помилки — надай ПОКРАЩЕНУ версію.
+3. ФОРМАТ ВИВОДУ (СТРОГО):
+   [Твій аналіз/думки тут...]
+   {SEPARATOR}
+   [Тут лише фінальний текст відповіді для користувача]
+
+4. Якщо відповідь валідна, просто продублюй її після роздільника.
+5. НІКОЛИ не надсилай текст до роздільника користувачу.
 
 ІНСТРУКЦІЯ АКТОРУ:
-{instruction[:2000]}... (truncated)
+{instruction[:2000]}...
 
 ЗАПИТ КОРИСТУВАЧА:
 {user_query}
@@ -169,38 +177,25 @@ async def call_critic(
         
         critic_output = response.choices[0].message.content
         
-        # --- STRICT CLEANING PROTOCOL (Fix for leaking "CRITIC CONCLUSION") ---
-        # 1. If VALIDATED, just strip the tag
-        if "VALIDATED" in critic_output:
-            clean_resp = critic_output.replace("✅ VALIDATED", "").replace("VALIDATED", "").strip()
-            # If nothing remains, it means the Critic just said "Validated" -> Stick to Actor
-            if not clean_resp or len(clean_resp) < 5:
-                return actor_response, "♊"
-            return clean_resp, "♊+🐋"
-
-        # 2. If REJECTED/CORRECTED, we need to extract ONLY the final response
-        # The prompt asks for "**ПОКРАЩЕНА ВІДПОВІДЬ:**" or just the text.
-        # We must strip everything before the final text.
+        # --- ROBUST PARSING PROTOCOL ---
+        if SEPARATOR in critic_output:
+            final_part = critic_output.split(SEPARATOR)[-1].strip()
+            if final_part:
+                # If Critic just echoed the actor exactly (validated), keep strict Actor attribution? 
+                # Or give credit to Synergistic approach.
+                if final_part == actor_response.strip():
+                     return final_part, "♊" # Validated, no change
+                return final_part, "♊+🐋"
         
-        markers = ["**ПОКРАЩЕНА ВІДПОВІДЬ:**", "**IMPROVED RESPONSE:**", "### RESPONSE"]
-        for marker in markers:
-            if marker in critic_output:
-                # Take everything AFTER the marker
-                try:
-                    final_part = critic_output.split(marker)[-1].strip()
-                    if final_part:
-                        return final_part, "♊+🐋"
-                except:
-                    pass
-        
-        # 3. Fallback: If no markers, but it's a correction, 
-        # sadly we might leak the critique unless we return Actor's text.
-        # Better safe than sorry: If we can't parse the improvement, use Actor's original.
-        if "**ВИСНОВОК" in critic_output or "**CONCLUSION" in critic_output:
-            logger.warning("⚠️ Critic output format invalid (leaked internal headers). Reverting to Actor.")
-            return actor_response, "♊"
+        # Fallback for "VALIDATED" without separator (Legacy behavior support)
+        if "VALIDATED" in critic_output and len(critic_output) < 200:
+             return actor_response, "♊"
 
-        return critic_output, "♊+🐋 (Corrected)"
+        # FAIL-SAFE: If structure is broken, DO NOT return raw output.
+        # It risks leaking internal monologue. Return Actor's original.
+        logger.warning("⚠️ Critic output format invalid (missing separator). Reverting to Actor to prevent leak.")
+        logger.debug(f"Failed Critic Output: {critic_output[:100]}")
+        return actor_response, "♊"
         
     except Exception as e:
         logger.warning(f"⚠️ Critic failed: {e}")

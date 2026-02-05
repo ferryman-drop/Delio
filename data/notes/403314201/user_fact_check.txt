@@ -1,0 +1,1 @@
+User asked: 'Яка столиця Франції?'. Provided correct answer: Paris. Interaction was simple and correct.

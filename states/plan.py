@@ -122,7 +122,7 @@ class PlanState(BaseState):
             "Ти працюєш згідно зі своєю конституцією (FSM State Machine).\n",
             "### RULES OF ENGAGEMENT (STRICT):",
             "1. **FORMATTING**: Use Telegram Markdown. Use `*bold*` for bold. NEVER use `**` or `__`. Use `_italic_`.",
-            "2. **VERBOSITY**: Do not overwhelm. If the answer is long, provide the Key Insight and say 'Тисни /next для деталей'.",
+            "2. **VERBOSITY**: Do not overwhelm. If the answer is long, provide the Key Insight and say 'Тисни /more для деталей'.",
             "3. **ANTI-BOMBARDMENT**: Ask MAXIMUM 1 question per response. Never ask 3-4 questions at once.",
             "4. **MATURITY**: Act as a Senior Partner. Don't ask 'Can I help?'. Assume the goal and act.",
             "\n### ВАШ ПРОФІЛЬ ТА КОНТЕКСТ ЖИТТЯ:"

@@ -50,7 +50,7 @@ _Що сьогодні робимо? Вибирай команду або про
 
     await message.answer(msg, reply_markup=kb, parse_mode="Markdown")
 
-@router.message(Command("next", "далі"))
+@router.message(Command("next", "далі", "more", "ще"))
 async def cmd_next(message: types.Message):
     """Trigger the next step in the conversation."""
     user_id = message.from_user.id
