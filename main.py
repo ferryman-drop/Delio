@@ -38,6 +38,7 @@ async def main():
     from states.observe import ObserveState
     from states.retrieve import RetrieveState
     from states.plan import PlanState
+    from states.deep_think import DeepThinkState
     from states.decide import DecideState
     from states.act import ActState
     from states.respond import RespondState
@@ -47,11 +48,12 @@ async def main():
 
     fsm.register_handler(State.OBSERVE, ObserveState())
     fsm.register_handler(State.RETRIEVE, RetrieveState())
-    fsm.register_handler(State.PLAN, PlanState())
+    fsm.register_handler(State.PLAN, PlanState(bot))
+    fsm.register_handler(State.DEEP_THINK, DeepThinkState(bot))
     fsm.register_handler(State.DECIDE, DecideState())
     fsm.register_handler(State.ACT, ActState())
     fsm.register_handler(State.RESPOND, RespondState(bot))
-    fsm.register_handler(State.REFLECT, ReflectState())
+    fsm.register_handler(State.REFLECT, ReflectState(bot))
     fsm.register_handler(State.MEMORY_WRITE, MemoryWriteState())
     fsm.register_handler(State.ERROR, ErrorState(bot))
     logger.info("✅ AID Kernel (FSM) initialized")
@@ -75,11 +77,18 @@ async def main():
     from aiogram.types import BotCommand
     commands = [
         BotCommand(command="start", description="🏠 Головна / Перезапуск"),
-        BotCommand(command="agent", description="🕵️ Аналіз останньої відповіді"),
+        BotCommand(command="define", description="📝 Створити команду"),
+        BotCommand(command="interview", description="🎤 Інтерв'ю"),
         BotCommand(command="memory", description="🧠 Моя Пам'ять (V2)"),
+        BotCommand(command="logic", description="🕵️ Логіка відповіді"),
+        BotCommand(command="think", description="🧠 Глибокий аналіз (System 2)"),
+        BotCommand(command="profilemaster", description="👑 Режим Стратега"),
+        BotCommand(command="profiletextboost", description="✍️ Режим Редактора"),
+        BotCommand(command="word", description="🌐 Перекладач"),
+        BotCommand(command="uptext", description="🚀 Покращення тексту"),
         BotCommand(command="snapshot", description="📸 Знімок пам'яті"),
-        BotCommand(command="help", description="❓ Допомога"),
         BotCommand(command="reset", description="🧹 Очистити контекст"),
+        BotCommand(command="help", description="❓ Допомога"),
     ]
     await bot.set_my_commands(commands)
     

@@ -53,16 +53,20 @@ TELEGRAM_STYLE = """
 5. Не використовуй надлишкове оформлення.
 """
 
-# Prompt
-SYSTEM_PROMPT = yaml_config.get('context', {}).get('system_prompt', """Ти — Delio, персональний Life OS Mentor.
-Твоя стратегія: Бути максимально корисним, проактивним та прямолінійним.
+# --- CONFIGURATION (LIFE) ---
+BIRTH_TIMESTAMP = "2026-02-06T21:40:00" # V4.0 Launch
 
-ПРАВИЛА ПОВЕДІНКИ:
-1. НЕ запитуй дозволу. Приймай рішення на основі даних та повідомляй про них. (Замість "Чи хочеш перевірити таски?", кажи "Я перевірив твої таски. У нас 3 дедлайни, почнемо з найскладнішого").
-2. Стоп-фрази: Уникай "Як я можу допомогти?", "Що далі?", "Я готовий до роботи". 
-3. Тон: Впевнений, партнерський, лаконічний. Ти — стратегічний партнер, а не сервісний бот.
-4. Імпровізація: Додавай короткі, влучні спостереження або філософські зв'язки, якщо це доречно.
-""")
+# Load Persona
+try:
+    with open('data/persona.yaml', 'r', encoding='utf-8') as f:
+        persona_config = yaml.safe_load(f)
+except Exception as e:
+    print(f"⚠️ persona.yaml missing: {e}")
+    persona_config = {}
+
+# Prompt
+SYSTEM_PROMPT = persona_config.get('context', {}).get('system_prompt', """Ти — Delio. (Fallback Prompt)""")
+
 
 # Default Aliases
 GEMINI_DEFAULT_MODEL = MODEL_BALANCED
@@ -99,5 +103,10 @@ def setup_logging():
     # Adding it here would cause duplicate entries (one from app, one from systemd).
     
     return logger
+
+# --- MEMORY V2 CONFIG ---
+SQLITE_DB_PATH = os.getenv("SQLITE_DB_PATH", "data/delio_memory.db")
+CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "data/chroma_db")
+OBSIDIAN_ROOT = os.getenv("OBSIDIAN_ROOT", "/data/obsidian")
 
 logger = setup_logging()

@@ -10,6 +10,7 @@ class ExecutionContext:
     user_id: Optional[int] = None
     event_type: str = "message"
     raw_input: str = ""
+    intent: str = "COMPLEX"
     start_time: datetime = field(default_factory=datetime.now)
     trace_id: str = field(default_factory=lambda: str(__import__('uuid').uuid4()))
     
@@ -21,6 +22,7 @@ class ExecutionContext:
     tool_outputs: List[Dict[str, Any]] = field(default_factory=list)
     act_results: List[Any] = field(default_factory=list)
     response: str = ""
+    sent_response: str = "" # Final formatted response captured in RespondState
     
     # Execution markers
     errors: List[str] = field(default_factory=list)

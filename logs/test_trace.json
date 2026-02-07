@@ -1,6 +1,0 @@
-{"timestamp": "2026-02-05T22:12:53.539178", "level": "DEBUG", "message": "Using selector: EpollSelector", "module": "selector_events", "line": 64, "trace_id": null}
-{"timestamp": "2026-02-05T22:12:53.552145", "level": "INFO", "message": "Executing MockState for trace b4932f23-aa74-46a1-b548-79e5af519557", "module": "test_trace_alert", "line": 26, "trace_id": "b4932f23-aa74-46a1-b548-79e5af519557"}
-{"timestamp": "2026-02-05T22:12:54.563683", "level": "DEBUG", "message": "Using selector: EpollSelector", "module": "selector_events", "line": 64, "trace_id": null}
-{"timestamp": "2026-02-05T22:15:16.112668", "level": "DEBUG", "message": "Using selector: EpollSelector", "module": "selector_events", "line": 64, "trace_id": null}
-{"timestamp": "2026-02-05T22:15:16.117747", "level": "INFO", "message": "Executing MockState for trace 3253ff25-f9eb-42c7-8bdd-02309a9c87e3", "module": "test_trace_alert", "line": 26, "trace_id": "3253ff25-f9eb-42c7-8bdd-02309a9c87e3"}
-{"timestamp": "2026-02-05T22:15:17.121886", "level": "DEBUG", "message": "Using selector: EpollSelector", "module": "selector_events", "line": 64, "trace_id": null}

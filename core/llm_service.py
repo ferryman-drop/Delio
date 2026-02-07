@@ -6,21 +6,35 @@ from typing import Tuple, Optional
 import os
 import json
 
-# Google GenAI SDK
+# Google GenAI SDK (required)
 try:
     from google import genai
     from google.genai import types
-except ImportError:
-    # This might fail if using older environment without new SDK, 
-    # but requirement Phase 3 specified migrating to it.
-    pass
+except ImportError as _e:
+    raise ImportError(f"google-genai SDK is required: {_e}. Install with: pip install google-genai")
 
 try:
     import anthropic
 except ImportError:
-    pass
+    anthropic = None
 
 logger = logging.getLogger("Delio.LLMService")
+
+
+async def _retry_async(coro_fn, max_retries=2, base_delay=1.0):
+    """Simple retry with exponential backoff for LLM calls."""
+    last_err = None
+    for attempt in range(max_retries + 1):
+        try:
+            return await coro_fn()
+        except Exception as e:
+            last_err = e
+            if attempt < max_retries:
+                delay = base_delay * (2 ** attempt)
+                logger.warning(f"⚠️ LLM call failed (attempt {attempt+1}/{max_retries+1}): {e}. Retrying in {delay}s...")
+                await asyncio.sleep(delay)
+    raise last_err
+
 
 async def call_actor(
     user_id: int,
@@ -47,7 +61,8 @@ async def call_actor(
         
         # Prepare content list
         contents = []
-        
+        _uploaded_file_name = None
+
         # 1. Image (if present)
         if image_path:
             if not os.path.exists(image_path):
@@ -67,12 +82,12 @@ async def call_actor(
                     # Wait for processing if video (images are usually instant)
                     # But safer to check
                     if uploaded_file.state == "PROCESSING":
-                        import time
-                        time.sleep(1) 
+                        await asyncio.sleep(1)
                         uploaded_file = client.files.get(name=uploaded_file.name)
                         
                     contents.append(uploaded_file)
-                    
+                    _uploaded_file_name = uploaded_file.name
+
                 except Exception as up_err:
                     logger.error(f"Image upload failed: {up_err}")
                     # Fallback? Maybe skip image.
@@ -92,19 +107,27 @@ async def call_actor(
         # Ideally, we should pass history as actual chat history messages.
         # But for Phase 3.3 Task 007, we stick to the interface: user_raw_input + system_instruction.
         
-        response = client.models.generate_content(
+        response = await _retry_async(lambda: asyncio.to_thread(
+            client.models.generate_content,
             model=model_name,
             contents=contents,
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
                 temperature=0.7
             )
-        )
+        ))
         
         if not response.text:
             logger.warning(f"⚠️ Empty response from {model_name} for user {user_id}")
             return " Error: Empty response from model.", model_name
             
+        # Cleanup uploaded file to avoid quota exhaustion
+        if _uploaded_file_name:
+            try:
+                client.files.delete(name=_uploaded_file_name)
+            except Exception:
+                pass
+
         logger.info(f"🤖 Raw response from {model_name}: {response.text[:1000]}...")
         return response.text, model_name
 
@@ -256,29 +279,44 @@ async def evaluate_performance(user_input: str, bot_response: str) -> dict:
     Returns dict: {score: int, critique: str, correction: str}
     """
     try:
-        # Use simple Generation for speed
+        prompt = f"""ACT AS: AI Quality Assurance Supervisor.
+TASK: Evaluate the following chatbot interaction.
+
+USER INPUT: {user_input}
+BOT RESPONSE: {bot_response}
+
+CRITERIA:
+1. Did it directly answer the intent?
+2. Was the tone appropriate (Helpful, Professional but Friendly)?
+3. Was it concise?
+
+OUTPUT JSON ONLY:
+{{
+    "score": <1-10>,
+    "critique": "<short text>",
+    "correction": "<what to do differently next time>"
+}}
+"""
+        # Use DeepSeek (Critic) to avoid self-evaluation bias (Actor is Gemini)
+        if config.DEEPSEEK_KEY:
+            try:
+                from openai import OpenAI
+                ds_client = OpenAI(api_key=config.DEEPSEEK_KEY, base_url="https://api.deepseek.com")
+                response = await asyncio.to_thread(
+                    ds_client.chat.completions.create,
+                    model="deepseek-chat",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.3
+                )
+                result = json.loads(response.choices[0].message.content)
+                if isinstance(result, list) and len(result) > 0:
+                    return result[0]
+                return result
+            except Exception as ds_err:
+                logger.warning(f"⚠️ DeepSeek evaluation failed, falling back to Gemini: {ds_err}")
+
+        # Fallback to Gemini
         client = genai.Client(api_key=config.GEMINI_KEY)
-        
-        prompt = f"""
-        ACT AS: AI Quality Assurance Supervisor.
-        TASK: Evaluate the following chatbot interaction.
-        
-        USER INPUT: {user_input}
-        BOT RESPONSE: {bot_response}
-        
-        CRITERIA:
-        1. Did it directly answer the intent?
-        2. Was the tone appropriate (Helpful, Professional but Friendly)?
-        3. Was it concise?
-        
-        OUTPUT JSON ONLY:
-        {{
-            "score": <1-10>,
-            "critique": "<short text>",
-            "correction": "<what to do differently next time>"
-        }}
-        """
-        
         response = await asyncio.to_thread(
             client.models.generate_content,
             model=config.MODEL_FAST,
@@ -287,12 +325,189 @@ async def evaluate_performance(user_input: str, bot_response: str) -> dict:
                 response_mime_type="application/json"
             )
         )
-        
         result = json.loads(response.text)
         if isinstance(result, list) and len(result) > 0:
             return result[0]
         return result
-        
+
     except Exception as e:
         logger.warning(f"⚠️ Evaluation failed: {e}")
-        return {"score": 5, "critique": "Evaluation Error", "correction": "None"}
+        return None  # Caller must handle None (skip lesson storage)
+
+# Add to core/llm_service.py
+
+
+async def transcribe_audio(file_path: str) -> Optional[str]:
+    """
+    Transcribes audio file using Gemini Flash (Fast).
+    """
+    try:
+        from google import genai
+        from google.genai import types
+        import os
+        client = genai.Client(api_key=config.GEMINI_KEY)
+        
+        file_name = os.path.basename(file_path)
+        logger.info(f"🎤 Uploading audio file: {file_name}")
+        
+        if not os.path.exists(file_path):
+             logger.error(f"❌ Audio file not found: {file_path}")
+             return None
+             
+        # Upload
+        audio_file = client.files.upload(file=file_path)
+        
+        # Wait for processing
+        max_wait = 30
+        waited = 0
+        while audio_file.state == "PROCESSING" and waited < max_wait:
+             await asyncio.sleep(1)
+             waited += 1
+             audio_file = client.files.get(name=audio_file.name)
+             
+        if audio_file.state == "FAILED":
+             raise ValueError(f"Audio processing failed: {audio_file.state}")
+
+        # Generate transcription
+        response = await asyncio.to_thread(
+            client.models.generate_content,
+            model=config.MODEL_FAST,
+            contents=[audio_file, "Please transcribe this audio file verbatim. If the audio is in Ukrainian, Russian, or Polish, transcribe it exactly in that language. Do not translate. Return ONLY the text."]
+        )
+        return response.text
+    except Exception as e:
+        logger.error(f"Transcription Error: {e}")
+        return None
+
+async def refine_text(raw_text: str) -> str:
+    """
+    Clean up text using DeepSeek (Preferred) or Gemini (Fallback).
+    Removes fillers, structures thoughts.
+    """
+    try:
+        logger.info("🧠 Refining text...")
+        
+        prompt = f"""
+You are a Professional Editor.
+Task: Clean up the following spoken text.
+1. Remove filler words (umm, err, repeats).
+2. Fix grammar/syntax.
+3. Keep the original language (Ukrainian).
+4. Output ONLY the refined text. No introductory phrases.
+
+Input Text:
+"{raw_text}"
+"""
+        # Try DeepSeek first (cheaper/better for text logic)
+        if config.DEEPSEEK_KEY:
+            try:
+                from openai import OpenAI
+                ds_client = OpenAI(api_key=config.DEEPSEEK_KEY, base_url="https://api.deepseek.com")
+                response = await asyncio.to_thread(
+                    ds_client.chat.completions.create,
+                    model="deepseek-chat",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.3
+                )
+                return response.choices[0].message.content
+            except Exception as ds_err:
+                logger.warning(f"DeepSeek refine failed: {ds_err}. Falling back to Gemini.")
+        
+        # Fallback to Gemini
+        client = genai.Client(api_key=config.GEMINI_KEY)
+        response = await asyncio.to_thread(
+            client.models.generate_content,
+            model=config.MODEL_FAST,
+            contents=prompt
+        )
+        return response.text
+        
+    except Exception as e:
+        logger.error(f"Refining Error: {e}")
+        return raw_text # Fallback to raw
+
+async def extract_attributes(text: str) -> dict:
+    """
+    Витягує атрибути користувача з тексту (ім'я, місто, професія тощо).
+    Повертає dict {key: value} або {}.
+    """
+    try:
+        client = genai.Client(api_key=config.GEMINI_KEY)
+        prompt = f"""Extract personal attributes from this text. Return JSON only.
+Keys should be lowercase English (e.g. "name", "city", "profession", "age", "language").
+If no attributes found, return empty object {{}}.
+
+Text: "{text}"
+"""
+        response = await asyncio.to_thread(
+            client.models.generate_content,
+            model=config.MODEL_FAST,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json"
+            )
+        )
+        result = json.loads(response.text)
+        if isinstance(result, list) and len(result) > 0:
+            return result[0]
+        if isinstance(result, dict):
+            return result
+        return {}
+    except Exception as e:
+        logger.warning(f"⚠️ extract_attributes failed: {e}")
+        return {}
+
+
+async def call_deep_think(
+    user_id: int,
+    text: str,
+    memory_summary: str,
+    image_path: Optional[str] = None
+) -> Tuple[str, str]:
+    """
+    System 2 Reasoning: Slower, deeper, analytical.
+    Uses Pro model and specialized instructions.
+    """
+    try:
+        from core.prompts.deep_think import DEEP_THINK_SYSTEM
+        from google import genai
+        from google.genai import types
+        
+        client = genai.Client(api_key=config.GEMINI_KEY)
+        
+        # Build analytical context
+        full_instruction = f"{DEEP_THINK_SYSTEM}\n\n### [CONTEXT SUMMARY]\n{memory_summary}"
+        
+        logger.info(f"🧩 Initiating Deep Think (System 2) for user {user_id}")
+        
+        # Prepare contents
+        contents = []
+        if image_path and os.path.exists(image_path):
+            uploaded_file = client.files.upload(file=image_path)
+            # Wait for processing
+            while uploaded_file.state == "PROCESSING":
+                await asyncio.sleep(1)
+                uploaded_file = client.files.get(name=uploaded_file.name)
+            contents.append(uploaded_file)
+
+        contents.append(f"[QUERY]: {text}")
+        
+        response = await asyncio.to_thread(
+            client.models.generate_content,
+            model=config.MODEL_SMART, # Always use Pro for Deep Think
+            contents=contents,
+            config=types.GenerateContentConfig(
+                system_instruction=full_instruction,
+                temperature=0.4, # Lower temperature for better logic
+                max_output_tokens=2048
+            )
+        )
+        
+        if not response.text:
+             return "Error: Empty response in Deep Think", "Error"
+             
+        return response.text, config.MODEL_SMART
+        
+    except Exception as e:
+        logger.error(f"❌ Deep Think Error: {e}")
+        raise e

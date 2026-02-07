@@ -1,96 +1,206 @@
-2026-02-05 23:34:01,872 - Delio.Tools - INFO - 🛠️ Phase 3 Agent Tools initialized.
-2026-02-05 23:34:01,874 - root - INFO - 🚀 Starting Delio Assistant (PID: 415950)...
-2026-02-05 23:34:01,967 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-02-05 23:34:01,968 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-02-05 23:34:01,969 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-02-05 23:34:01,969 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
-2026-02-05 23:34:01,971 - apscheduler.scheduler - INFO - Added job "digest_daily_logs" to job store "default"
-2026-02-05 23:34:01,972 - apscheduler.scheduler - INFO - Added job "run_learning_cycle" to job store "default"
-2026-02-05 23:34:01,972 - apscheduler.scheduler - INFO - Added job "apply_memory_decay_all_users" to job store "default"
-2026-02-05 23:34:01,973 - apscheduler.scheduler - INFO - Added job "trigger_heartbeat" to job store "default"
-2026-02-05 23:34:01,973 - apscheduler.scheduler - INFO - Scheduler started
-2026-02-05 23:34:01,973 - scheduler - INFO - ⏳ Scheduler started
-2026-02-05 23:34:04,181 - root - INFO - ✅ AID Kernel (FSM) initialized
-2026-02-05 23:34:04,182 - memory_manager_v2 - INFO - ✅ Structured Memory V2 initialized
-2026-02-05 23:34:04,182 - memory_populator - INFO - ✅ Memory Auto-Populator initialized
-2026-02-05 23:34:04,182 - model_control - INFO - ✅ Model Controller initialized
-2026-02-05 23:34:04,183 - root - INFO - ✅ Advanced Memory System (V2) initialized
-2026-02-05 23:34:04,333 - root - INFO - ✅ Bot is running...
-2026-02-05 23:34:04,335 - aiogram.dispatcher - INFO - Start polling
-2026-02-05 23:34:04,354 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
-2026-02-05 23:35:51,685 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: message)
-2026-02-05 23:35:51,982 - old_memory - ERROR - ❌ Embedding error (retrieval_query): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/text-embedding-004 is not found for API version v1beta, or is not supported for embedContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
-2026-02-05 23:35:51,984 - Delio.MemoryFunnel - INFO - ✅ Funnel complete. Short: 0, Long: 0
-2026-02-05 23:35:51,988 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
-2026-02-05 23:35:52,219 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2026-02-05 23:35:53,394 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: Я готовий допомогти. Уточни, будь ласка, де саме ти хочеш, щоб я записав число 33? Наприклад, я можу створити нову нотатку, додати його до існуючої, або встановити нагадування.
+2026-02-07 16:35:41,032 - Delio.Tools - INFO - 🛠️ Phase 3 Agent Tools initialized.
+2026-02-07 16:35:41,035 - root - INFO - 🚀 Starting Delio Assistant (PID: 519791)...
+2026-02-07 16:35:41,112 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-07 16:35:41,113 - apscheduler.scheduler - INFO - Added job "trigger_heartbeat" to job store "default"
+2026-02-07 16:35:41,114 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-07 16:35:41,114 - scheduler - INFO - ⏳ Scheduler started
+2026-02-07 16:35:43,592 - root - INFO - ✅ AID Kernel (FSM) initialized
+2026-02-07 16:35:43,596 - memory_manager_v2 - INFO - ✅ Structured Memory V2 initialized
+2026-02-07 16:35:43,596 - memory_populator - INFO - ✅ Memory Auto-Populator initialized
+2026-02-07 16:35:43,599 - model_control - INFO - ✅ Model Controller initialized
+2026-02-07 16:35:43,599 - root - INFO - ✅ Advanced Memory System (V2) initialized
+2026-02-07 16:35:43,746 - root - INFO - ✅ Bot is running...
+2026-02-07 16:35:43,750 - aiogram.dispatcher - INFO - Start polling
+2026-02-07 16:35:43,779 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 16:38:49,265 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 16:38:49,409 - aiogram.event - INFO - Update id=950762401 is handled. Duration 153 ms by bot id=8316389694
+2026-02-07 16:39:14,982 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: message)
+2026-02-07 16:39:14,988 - Delio.Memory.Structured - INFO - ✅ Structured Memory initialized at data/delio_memory.db
+2026-02-07 16:39:14,994 - Delio.Memory.Redis - INFO - ✅ Redis connected at redis://localhost:6379/0
+2026-02-07 16:39:15,003 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-07 16:39:15,036 - Delio.Memory.Chroma - INFO - ✅ ChromaDB initialized at data/chroma_db
+2026-02-07 16:39:15,037 - Delio.MemoryFunnel - INFO - ✅ ContextFunnel backends initialized
+2026-02-07 16:39:15,624 - Delio.MemoryFunnel - INFO - ✅ Context Aggregated: 10 recent, 5 memories
+2026-02-07 16:39:15,687 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 16:39:15,906 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 16:39:16,548 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: Ані 23 роки. 😉
 ...
-2026-02-05 23:36:07,050 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
-2026-02-05 23:36:07,057 - Delio.Respond - INFO - 📤 Sending fragmented response to 403314201 (1 chunks)
-2026-02-05 23:36:07,330 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2026-02-05 23:36:08,323 - Delio.Reflect - WARNING - ⚠️ Low Performance detected (6/10). Learning...
-2026-02-05 23:36:08,586 - old_memory - ERROR - ❌ Embedding error (retrieval_document): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/text-embedding-004 is not found for API version v1beta, or is not supported for embedContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
-2026-02-05 23:36:09,145 - old_memory - INFO - 💾 Saved interaction to memory for user 403314201
-/root/ai_assistant/legacy/memory_integration.py:38: RuntimeWarning: coroutine 'MemoryController.process_interaction' was never awaited
-  memory_manager.global_memory.process_interaction(
-RuntimeWarning: Enable tracemalloc to get the object allocation traceback
-2026-02-05 23:36:09,149 - model_control - INFO - 🎛️ MCP derived for user 403314201: depth=medium, length=short, challenge=adaptive
-2026-02-05 23:36:09,149 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-05T23:35:51.685868 - START', '2026-02-05T23:35:51.686246 - OBSERVE', '2026-02-05T23:35:51.686342 - RETRIEVE', '2026-02-05T23:35:51.984858 - PLAN', '2026-02-05T23:36:07.057773 - DECIDE', '2026-02-05T23:36:07.057832 - RESPOND', '2026-02-05T23:36:07.146331 - REFLECT', '2026-02-05T23:36:08.332172 - MEMORY_WRITE']
-2026-02-05 23:36:09,149 - aiogram.event - INFO - Update id=950762285 is handled. Duration 17486 ms by bot id=8316389694
-2026-02-05 23:36:52,777 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: message)
-2026-02-05 23:36:53,021 - old_memory - ERROR - ❌ Embedding error (retrieval_query): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/text-embedding-004 is not found for API version v1beta, or is not supported for embedContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
-2026-02-05 23:36:53,023 - Delio.MemoryFunnel - INFO - ✅ Funnel complete. Short: 0, Long: 0
-2026-02-05 23:36:53,027 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
-2026-02-05 23:36:53,174 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2026-02-05 23:36:54,023 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: Зрозумів. Вся попередня інформація стерта. Я готовий до нових інструкцій. 👋
+2026-02-07 16:39:22,703 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 16:39:22,718 - Delio.Respond - INFO - ⚡ Skipping fragmentation for UX (is_command=False, is_short=True, is_simple=False)
+2026-02-07 16:39:22,718 - Delio.Respond - INFO - 📤 Sending response to 403314201 (1 chunks)
+2026-02-07 16:39:23,055 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 16:39:23,754 - Delio.Reflect - INFO - ✅ Good cycle (High Perf).
+2026-02-07 16:39:23,762 - Delio.Memory.Structured - INFO - ✅ Structured Memory initialized at data/delio_memory.db
+2026-02-07 16:39:23,765 - Delio.Memory.Redis - INFO - ✅ Redis connected at redis://localhost:6379/0
+2026-02-07 16:39:23,777 - Delio.Memory.Chroma - INFO - ✅ ChromaDB initialized at data/chroma_db
+2026-02-07 16:39:24,799 - Delio.MemoryWrite - ERROR - ❌ Error in MemoryWriteState: module 'core.llm_service' has no attribute 'extract_attributes'
+2026-02-07 16:39:24,799 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-07T16:39:14.984072 - START', '2026-02-07T16:39:14.984563 - OBSERVE', '2026-02-07T16:39:14.984661 - RETRIEVE', '2026-02-07T16:39:15.624587 - PLAN', '2026-02-07T16:39:22.718202 - DECIDE', '2026-02-07T16:39:22.718281 - RESPOND', '2026-02-07T16:39:22.868495 - REFLECT', '2026-02-07T16:39:23.754723 - MEMORY_WRITE']
+2026-02-07 16:39:24,800 - aiogram.event - INFO - Update id=950762402 is handled. Duration 9954 ms by bot id=8316389694
+2026-02-07 16:39:43,512 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: message)
+2026-02-07 16:39:43,949 - Delio.MemoryFunnel - INFO - ✅ Context Aggregated: 10 recent, 5 memories
+2026-02-07 16:39:44,007 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 16:39:44,213 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 16:39:44,878 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: ```json
+{"tool_calls": [{"name": "set_reminder", "arguments": {"text": "Ким Аня працює", "time_str": "3 minutes"}}]}
+```...
+2026-02-07 16:39:51,745 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 16:39:51,751 - Delio.Decide - INFO - 🛠️ Tool calls detected (1). Routing to ACT.
+2026-02-07 16:39:51,751 - Delio.Act - INFO - ⚙️ Action phase for user 403314201
+2026-02-07 16:39:51,751 - Delio.Act - INFO - 🛠️ Executing tool: set_reminder with args: {'text': 'Ким Аня працює', 'time_str': '3 minutes'}
+2026-02-07 16:39:51,754 - apscheduler.scheduler - INFO - Added job "ReminderTool._send_notification" to job store "default"
+2026-02-07 16:39:51,755 - Delio.Act - INFO - ✅ Tool set_reminder completed.
+2026-02-07 16:39:51,755 - Delio.Reflect - INFO - 📡 Tool outputs found. Routing back to PLAN for integration.
+2026-02-07 16:39:51,811 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 16:39:52,003 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 16:39:52,472 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: Я встановив нагадування: через 3 хвилини нагадаю, ким Аня працює. 😉
 ...
-2026-02-05 23:36:59,413 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: message)
-2026-02-05 23:36:59,921 - old_memory - INFO - 🔍 Retrieved 5 memories
-2026-02-05 23:36:59,923 - Delio.MemoryFunnel - INFO - ✅ Funnel complete. Short: 0, Long: 5
-2026-02-05 23:36:59,925 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
-2026-02-05 23:37:00,147 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2026-02-05 23:37:01,014 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: Вибачте, я не знаю ваше місцезнаходження, щоб сказати вам, яка там погода....
-2026-02-05 23:37:01,252 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
-2026-02-05 23:37:01,260 - Delio.Respond - INFO - 📤 Sending fragmented response to 403314201 (1 chunks)
-2026-02-05 23:37:01,528 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2026-02-05 23:37:02,382 - Delio.Reflect - INFO - ✅ Good cycle (High Perf).
-2026-02-05 23:37:03,164 - old_memory - ERROR - ❌ Embedding error (retrieval_document): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/text-embedding-004 is not found for API version v1beta, or is not supported for embedContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
-2026-02-05 23:37:03,167 - old_memory - INFO - 💾 Saved interaction to memory for user 403314201
-2026-02-05 23:37:03,172 - model_control - INFO - 🎛️ MCP derived for user 403314201: depth=medium, length=short, challenge=adaptive
-2026-02-05 23:37:03,172 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-05T23:36:52.778457 - START', '2026-02-05T23:36:52.778762 - OBSERVE', '2026-02-05T23:36:52.778827 - RETRIEVE', '2026-02-05T23:36:53.024232 - PLAN', '2026-02-05T23:37:01.260811 - DECIDE', '2026-02-05T23:37:01.260880 - RESPOND', '2026-02-05T23:37:01.327009 - REFLECT', '2026-02-05T23:37:02.382662 - MEMORY_WRITE']
-2026-02-05 23:37:03,173 - aiogram.event - INFO - Update id=950762286 is handled. Duration 10399 ms by bot id=8316389694
-2026-02-05 23:37:12,389 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
-2026-02-05 23:37:12,400 - Delio.StateGuard - ERROR - ❌ FORBIDDEN TRANSITION for 403314201: IDLE -> DECIDE
-2026-02-05 23:37:12,503 - Delio.StateGuard - ERROR - Failed to send alert: Telegram server says - Bad Request: chat not found
-2026-02-05 23:37:12,503 - Delio.FSM - ERROR - 💥 Error in state State.PLAN for user 403314201: ❌ FORBIDDEN TRANSITION for 403314201: IDLE -> DECIDE
+2026-02-07 16:39:59,956 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 16:39:59,964 - Delio.Respond - INFO - ⚡ Skipping fragmentation for UX (is_command=False, is_short=True, is_simple=False)
+2026-02-07 16:39:59,964 - Delio.Respond - INFO - 📤 Sending response to 403314201 (1 chunks)
+2026-02-07 16:40:00,262 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 16:40:01,180 - Delio.Reflect - INFO - ✅ Good cycle (High Perf).
+2026-02-07 16:40:02,396 - Delio.MemoryWrite - ERROR - ❌ Error in MemoryWriteState: module 'core.llm_service' has no attribute 'extract_attributes'
+2026-02-07 16:40:02,397 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-07T16:39:43.513010 - START', '2026-02-07T16:39:43.513170 - OBSERVE', '2026-02-07T16:39:43.513210 - RETRIEVE', '2026-02-07T16:39:43.950302 - PLAN', '2026-02-07T16:39:51.751007 - DECIDE', '2026-02-07T16:39:51.751577 - ACT', '2026-02-07T16:39:51.755564 - REFLECT', '2026-02-07T16:39:51.755686 - PLAN', '2026-02-07T16:39:59.964085 - DECIDE', '2026-02-07T16:39:59.964180 - RESPOND', '2026-02-07T16:40:00.025366 - REFLECT', '2026-02-07T16:40:01.181126 - MEMORY_WRITE']
+2026-02-07 16:40:02,398 - aiogram.event - INFO - Update id=950762403 is handled. Duration 19005 ms by bot id=8316389694
+2026-02-07 16:42:51,763 - apscheduler.scheduler - INFO - Removed job reminder_403314201_1770482571.753068
+2026-02-07 16:42:51,767 - apscheduler.executors.default - INFO - Running job "ReminderTool._send_notification (trigger: date[2026-02-07 16:42:51 UTC], next run at: 2026-02-07 16:42:51 UTC)" (scheduled at 2026-02-07 16:42:51.753068+00:00)
+2026-02-07 16:42:51,768 - Delio.ReminderTool - WARNING - ⚠️ Bot instance not set in scheduler, cannot send reminder.
+2026-02-07 16:42:51,769 - apscheduler.executors.default - INFO - Job "ReminderTool._send_notification (trigger: date[2026-02-07 16:42:51 UTC], next run at: 2026-02-07 16:42:51 UTC)" executed successfully
+2026-02-07 17:00:00,010 - apscheduler.executors.default - INFO - Running job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 17:30:00 UTC)" (scheduled at 2026-02-07 17:00:00+00:00)
+2026-02-07 17:00:00,027 - apscheduler.executors.default - INFO - Job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 17:30:00 UTC)" executed successfully
+2026-02-07 17:00:00,028 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: heartbeat)
+2026-02-07 17:00:00,584 - Delio.MemoryFunnel - INFO - ✅ Context Aggregated: 10 recent, 5 memories
+2026-02-07 17:00:00,674 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 17:00:00,957 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:00:01,536 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: SKIP
+...
+2026-02-07 17:00:10,172 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 17:00:10,182 - Delio.Decide - INFO - 🤖 Autonomy trigger detected in DECIDE (Active Message)
+2026-02-07 17:00:10,183 - Delio.Respond - INFO - ⚡ Skipping fragmentation for UX (is_command=False, is_short=True, is_simple=False)
+2026-02-07 17:00:10,183 - Delio.Respond - INFO - 📤 Sending response to 403314201 (1 chunks)
+2026-02-07 17:00:10,511 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:00:11,340 - Delio.Reflect - INFO - ✅ Good cycle (High Perf).
+2026-02-07 17:00:11,347 - Delio.Memory.Digest - INFO - 🌔 Starting Digestion for user 403314201...
+2026-02-07 17:00:11,598 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:00:13,470 - Delio.Memory.Digest - INFO - 💾 Digested Fact: core_identity.significant_other_name = Аня
+2026-02-07 17:00:13,478 - Delio.Memory.Digest - INFO - 💾 Digested Fact: core_identity.significant_other_age = 23
+2026-02-07 17:00:13,487 - Delio.Memory.Digest - INFO - 💾 Digested Fact: goals.reminder_about_anya_occupation = User wants to be reminded about Anya's occupation in 3 minutes.
+2026-02-07 17:00:13,505 - Delio.Memory.Digest - INFO - ✅ Digestion complete for user 403314201. Facts updated: 3
+2026-02-07 17:00:14,627 - Delio.MemoryWrite - ERROR - ❌ Error in MemoryWriteState: module 'core.llm_service' has no attribute 'extract_attributes'
+2026-02-07 17:00:14,628 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-07T17:00:00.029208 - START', '2026-02-07T17:00:00.029586 - OBSERVE', '2026-02-07T17:00:00.029669 - RETRIEVE', '2026-02-07T17:00:00.584926 - PLAN', '2026-02-07T17:00:10.182436 - DECIDE', '2026-02-07T17:00:10.182926 - RESPOND', '2026-02-07T17:00:10.248406 - REFLECT', '2026-02-07T17:00:13.505701 - MEMORY_WRITE']
+2026-02-07 17:30:00,080 - apscheduler.executors.default - INFO - Running job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 18:00:00 UTC)" (scheduled at 2026-02-07 17:30:00+00:00)
+2026-02-07 17:30:00,170 - apscheduler.executors.default - INFO - Job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 18:00:00 UTC)" executed successfully
+2026-02-07 17:30:00,187 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: heartbeat)
+2026-02-07 17:30:02,251 - Delio.MemoryFunnel - INFO - ✅ Context Aggregated: 10 recent, 5 memories
+2026-02-07 17:30:02,495 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 17:30:02,761 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:30:03,622 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: ```json
+{"tool_calls": [{"name": "set_reminder", "arguments": {"text": "Нагадування про професію Ані", "time_str": "3 minutes"}}]}
+```...
+2026-02-07 17:30:10,026 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 17:30:10,035 - Delio.Decide - INFO - 🛠️ Tool calls detected (1). Routing to ACT.
+2026-02-07 17:30:10,037 - Delio.Act - INFO - ⚙️ Action phase for user 403314201
+2026-02-07 17:30:10,037 - Delio.Act - INFO - 🛠️ Executing tool: set_reminder with args: {'text': 'Нагадування про професію Ані', 'time_str': '3 minutes'}
+2026-02-07 17:30:10,046 - apscheduler.scheduler - INFO - Added job "ReminderTool._send_notification" to job store "default"
+2026-02-07 17:30:10,046 - Delio.Act - INFO - ✅ Tool set_reminder completed.
+2026-02-07 17:30:10,046 - Delio.Reflect - INFO - 📡 Tool outputs found. Routing back to PLAN for integration.
+2026-02-07 17:30:10,087 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 17:30:10,308 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:30:11,096 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: ```json
+{"tool_calls": [{"name": "get_time", "arguments": {}}]}
+```...
+2026-02-07 17:30:15,663 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 17:30:15,667 - Delio.Decide - INFO - 🛠️ Tool calls detected (1). Routing to ACT.
+2026-02-07 17:30:15,667 - Delio.Act - INFO - ⚙️ Action phase for user 403314201
+2026-02-07 17:30:15,668 - Delio.Act - INFO - 🛠️ Executing tool: get_time with args: {}
+2026-02-07 17:30:15,668 - Delio.Act - INFO - ✅ Tool get_time completed.
+2026-02-07 17:30:15,668 - Delio.Reflect - INFO - 📡 Tool outputs found. Routing back to PLAN for integration.
+2026-02-07 17:30:15,703 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 17:30:15,935 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:30:17,069 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: ```json
+{"tool_calls": [{"name": "set_reminder", "arguments": {"text": "Нагадати про професію Ані", "time_str": "3 minutes"}}, {"name": "update_profile", "arguments": {"section": "goals", "key": "reminder_about_anya_occupation", "value": "User wants to be reminded about Anya's occupation in 3 minutes.", "confidence": 0.9}}]}
+```...
+2026-02-07 17:30:29,390 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 17:30:29,400 - Delio.Decide - INFO - 🛠️ Tool calls detected (2). Routing to ACT.
+2026-02-07 17:30:29,400 - Delio.Act - INFO - ⚙️ Action phase for user 403314201
+2026-02-07 17:30:29,401 - Delio.Act - INFO - 🛠️ Executing tool: set_reminder with args: {'text': 'Нагадати про професію Ані', 'time_str': '3 minutes'}
+2026-02-07 17:30:29,402 - apscheduler.scheduler - INFO - Added job "ReminderTool._send_notification" to job store "default"
+2026-02-07 17:30:29,402 - Delio.Act - INFO - ✅ Tool set_reminder completed.
+2026-02-07 17:30:29,402 - Delio.Act - INFO - 🛠️ Executing tool: update_profile with args: {'section': 'goals', 'key': 'reminder_about_anya_occupation', 'value': "User wants to be reminded about Anya's occupation in 3 minutes.", 'confidence': 0.9}
+2026-02-07 17:30:29,414 - Delio.ProfileTool - INFO - 💾 Profile Updated: goals.reminder_about_anya_occupation = User wants to be reminded about Anya's occupation in 3 minutes. (User: 403314201)
+2026-02-07 17:30:29,415 - Delio.Act - INFO - ✅ Tool update_profile completed.
+2026-02-07 17:30:29,415 - Delio.Reflect - INFO - 📡 Tool outputs found. Routing back to PLAN for integration.
+2026-02-07 17:30:29,474 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 17:30:29,698 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:30:30,405 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: ```json
+{"tool_calls": [{"name": "get_time", "arguments": {}}]}
+```...
+2026-02-07 17:30:34,804 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 17:30:34,812 - Delio.Decide - INFO - 🛠️ Tool calls detected (1). Routing to ACT.
+2026-02-07 17:30:34,812 - Delio.Act - INFO - ⚙️ Action phase for user 403314201
+2026-02-07 17:30:34,812 - Delio.Act - INFO - 🛠️ Executing tool: get_time with args: {}
+2026-02-07 17:30:34,812 - Delio.Act - INFO - ✅ Tool get_time completed.
+2026-02-07 17:30:34,813 - Delio.Reflect - INFO - 📡 Tool outputs found. Routing back to PLAN for integration.
+2026-02-07 17:30:34,856 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 17:30:35,092 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 17:30:35,834 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: ```json
+{"tool_calls": [{"name": "get_time", "arguments": {}}]}
+```...
+2026-02-07 17:30:40,313 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 17:30:40,323 - Delio.Decide - INFO - 🛠️ Tool calls detected (1). Routing to ACT.
+2026-02-07 17:30:40,323 - Delio.FSM - CRITICAL - 🛑 FSM Loop Limit Exceeded (20) for user 403314201
+2026-02-07 17:30:40,324 - Delio.StateGuard - WARNING - ⚠️ Emergency transition to ERROR for 403314201 from State.ACT
+2026-02-07 17:30:40,324 - Delio.Error - ERROR - 🚨 Handling ERROR state for user 403314201
+2026-02-07 17:30:40,325 - Delio.Error - ERROR - Errors: ['FSM Loop Limit Exceeded']
+2026-02-07 17:30:40,493 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-07T17:30:00.190799 - START', '2026-02-07T17:30:00.205321 - OBSERVE', '2026-02-07T17:30:00.207013 - RETRIEVE', '2026-02-07T17:30:02.252667 - PLAN', '2026-02-07T17:30:10.034887 - DECIDE', '2026-02-07T17:30:10.036634 - ACT', '2026-02-07T17:30:10.046935 - REFLECT', '2026-02-07T17:30:10.047067 - PLAN', '2026-02-07T17:30:15.667296 - DECIDE', '2026-02-07T17:30:15.667610 - ACT', '2026-02-07T17:30:15.668588 - REFLECT', '2026-02-07T17:30:15.668723 - PLAN', '2026-02-07T17:30:29.400481 - DECIDE', '2026-02-07T17:30:29.400877 - ACT', '2026-02-07T17:30:29.415641 - REFLECT', '2026-02-07T17:30:29.416069 - PLAN', '2026-02-07T17:30:34.812226 - DECIDE', '2026-02-07T17:30:34.812578 - ACT', '2026-02-07T17:30:34.813054 - REFLECT', '2026-02-07T17:30:34.813331 - PLAN', '2026-02-07T17:30:40.323036 - DECIDE', '2026-02-07T17:30:40.324490 - ERROR']
+2026-02-07 17:33:10,045 - apscheduler.scheduler - INFO - Removed job reminder_403314201_1770485590.040052
+2026-02-07 17:33:10,047 - apscheduler.executors.default - INFO - Running job "ReminderTool._send_notification (trigger: date[2026-02-07 17:33:10 UTC], next run at: 2026-02-07 17:33:10 UTC)" (scheduled at 2026-02-07 17:33:10.040052+00:00)
+2026-02-07 17:33:10,048 - Delio.ReminderTool - WARNING - ⚠️ Bot instance not set in scheduler, cannot send reminder.
+2026-02-07 17:33:10,048 - apscheduler.executors.default - INFO - Job "ReminderTool._send_notification (trigger: date[2026-02-07 17:33:10 UTC], next run at: 2026-02-07 17:33:10 UTC)" executed successfully
+2026-02-07 17:33:29,405 - apscheduler.scheduler - INFO - Removed job reminder_403314201_1770485609.401347
+2026-02-07 17:33:29,405 - apscheduler.executors.default - INFO - Running job "ReminderTool._send_notification (trigger: date[2026-02-07 17:33:29 UTC], next run at: 2026-02-07 17:33:29 UTC)" (scheduled at 2026-02-07 17:33:29.401347+00:00)
+2026-02-07 17:33:29,406 - Delio.ReminderTool - WARNING - ⚠️ Bot instance not set in scheduler, cannot send reminder.
+2026-02-07 17:33:29,406 - apscheduler.executors.default - INFO - Job "ReminderTool._send_notification (trigger: date[2026-02-07 17:33:29 UTC], next run at: 2026-02-07 17:33:29 UTC)" executed successfully
+2026-02-07 17:59:23,018 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 17:59:23,281 - aiogram.event - INFO - Update id=950762404 is handled. Duration 361 ms by bot id=8316389694
+2026-02-07 18:00:00,009 - apscheduler.executors.default - INFO - Running job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 18:30:00 UTC)" (scheduled at 2026-02-07 18:00:00+00:00)
+2026-02-07 18:00:00,017 - apscheduler.executors.default - INFO - Job "trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 18:30:00 UTC)" executed successfully
+2026-02-07 18:00:00,019 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: heartbeat)
+2026-02-07 18:00:00,637 - Delio.MemoryFunnel - INFO - ✅ Context Aggregated: 10 recent, 5 memories
+2026-02-07 18:00:00,723 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 18:00:00,947 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 18:00:01,766 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: ```json
+{"tool_calls": [{"name": "set_reminder", "arguments": {"text": "Нагадування про професію Ані", "time_str": "3 minutes"}}]}
+```...
+2026-02-07 18:00:09,667 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 18:00:09,680 - Delio.Decide - INFO - 🛠️ Tool calls detected (1). Routing to ACT.
+2026-02-07 18:00:09,681 - Delio.Act - INFO - ⚙️ Action phase for user 403314201
+2026-02-07 18:00:09,681 - Delio.Act - INFO - 🛠️ Executing tool: set_reminder with args: {'text': 'Нагадування про професію Ані', 'time_str': '3 minutes'}
+2026-02-07 18:00:09,682 - apscheduler.scheduler - INFO - Added job "ReminderTool._send_notification" to job store "default"
+2026-02-07 18:00:09,684 - Delio.Act - INFO - ✅ Tool set_reminder completed.
+2026-02-07 18:00:09,685 - Delio.Reflect - INFO - 📡 Tool outputs found. Routing back to PLAN for integration.
+2026-02-07 18:00:09,726 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
+2026-02-07 18:00:10,046 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-02-07 18:00:10,627 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: SKIP
+...
+2026-02-07 18:00:16,856 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
+2026-02-07 18:00:16,862 - Delio.Decide - INFO - 🤐 Heartbeat SKIPPED for user 403314201
+2026-02-07 18:00:16,863 - Delio.StateGuard - ERROR - ❌ FORBIDDEN TRANSITION for 403314201: DECIDE -> IDLE
+2026-02-07 18:00:16,926 - Delio.StateGuard - ERROR - Failed to send alert: Telegram server says - Bad Request: chat not found
+2026-02-07 18:00:16,927 - Delio.FSM - ERROR - 💥 Error in state State.DECIDE for user 403314201: ❌ FORBIDDEN TRANSITION for 403314201: DECIDE -> IDLE
 Traceback (most recent call last):
-  File "/root/ai_assistant/core/fsm.py", line 81, in process_event
+  File "/root/ai_assistant/core/fsm.py", line 104, in process_event
     await guard.enter(user_id, next_state)
   File "/root/ai_assistant/core/state_guard.py", line 140, in enter
-    raise e
   File "/root/ai_assistant/core/state_guard.py", line 125, in enter
-    raise RuntimeError(msg)
-RuntimeError: ❌ FORBIDDEN TRANSITION for 403314201: IDLE -> DECIDE
-2026-02-05 23:37:12,508 - Delio.StateGuard - WARNING - ⚠️ Emergency transition to ERROR for 403314201 from State.ERROR
-2026-02-05 23:37:12,509 - Delio.Error - ERROR - 🚨 Handling ERROR state for user 403314201
-2026-02-05 23:37:12,509 - Delio.Error - ERROR - Errors: ['❌ FORBIDDEN TRANSITION for 403314201: IDLE -> DECIDE']
-2026-02-05 23:37:12,552 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-05T23:36:59.413577 - START', '2026-02-05T23:36:59.413685 - OBSERVE', '2026-02-05T23:36:59.413747 - RETRIEVE', '2026-02-05T23:36:59.923446 - PLAN', '2026-02-05T23:37:12.509122 - ERROR']
-2026-02-05 23:37:12,553 - aiogram.event - INFO - Update id=950762287 is handled. Duration 13142 ms by bot id=8316389694
-2026-02-05 23:46:10,759 - Delio.FSM - INFO - 🌀 FSM Starting process for user 403314201 (event: message)
-2026-02-05 23:46:10,998 - old_memory - ERROR - ❌ Embedding error (retrieval_query): 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/text-embedding-004 is not found for API version v1beta, or is not supported for embedContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
-2026-02-05 23:46:11,000 - Delio.MemoryFunnel - INFO - ✅ Funnel complete. Short: 0, Long: 0
-2026-02-05 23:46:11,003 - Delio.LLMService - INFO - 🎤 Calling Actor (gemini-2.0-flash). Image: False
-2026-02-05 23:46:11,302 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2026-02-05 23:46:12,310 - Delio.LLMService - INFO - 🤖 Raw response from gemini-2.0-flash: Виконання коду `print(1/0)` призведе до помилки `ZeroDivisionError: division by zero`. Python не може ділити на нуль.
-
-*Ключовий висновок:* Ділення на нуль неприпустиме в математиці та програмуванні.
-...
-2026-02-05 23:46:27,371 - Delio.LLMService - WARNING - ⚠️ Critic timeout. Falling back to Actor response.
-2026-02-05 23:46:27,376 - memory_manager - INFO - ✅ Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db
-2026-02-05 23:46:27,399 - Delio.Respond - INFO - 📤 Sending fragmented response to 403314201 (2 chunks)
-2026-02-05 23:46:30,757 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2026-02-05 23:46:31,552 - Delio.Reflect - INFO - ✅ Good cycle (High Perf).
-2026-02-05 23:46:32,507 - old_memory - INFO - 💾 Saved interaction to memory for user 403314201
-2026-02-05 23:46:32,509 - model_control - INFO - 🎛️ MCP derived for user 403314201: depth=medium, length=short, challenge=adaptive
-2026-02-05 23:46:32,509 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-05T23:46:10.760198 - START', '2026-02-05T23:46:10.760710 - OBSERVE', '2026-02-05T23:46:10.760814 - RETRIEVE', '2026-02-05T23:46:11.000502 - PLAN', '2026-02-05T23:46:27.398591 - DECIDE', '2026-02-05T23:46:27.398769 - RESPOND', '2026-02-05T23:46:30.580127 - REFLECT', '2026-02-05T23:46:31.553887 - MEMORY_WRITE']
-2026-02-05 23:46:32,510 - aiogram.event - INFO - Update id=950762288 is handled. Duration 21754 ms by bot id=8316389694
+    """
+        
+RuntimeError: ❌ FORBIDDEN TRANSITION for 403314201: DECIDE -> IDLE
+2026-02-07 18:00:16,977 - Delio.StateGuard - WARNING - ⚠️ Emergency transition to ERROR for 403314201 from State.ERROR
+2026-02-07 18:00:16,978 - Delio.Error - ERROR - 🚨 Handling ERROR state for user 403314201
+2026-02-07 18:00:16,980 - Delio.Error - ERROR - Errors: ['❌ FORBIDDEN TRANSITION for 403314201: DECIDE -> IDLE']
+2026-02-07 18:00:17,034 - Delio.FSM - INFO - ✅ FSM Processed user 403314201. Trace: ['2026-02-07T18:00:00.020790 - START', '2026-02-07T18:00:00.021206 - OBSERVE', '2026-02-07T18:00:00.021284 - RETRIEVE', '2026-02-07T18:00:00.637793 - PLAN', '2026-02-07T18:00:09.680744 - DECIDE', '2026-02-07T18:00:09.681357 - ACT', '2026-02-07T18:00:09.685671 - REFLECT', '2026-02-07T18:00:09.685883 - PLAN', '2026-02-07T18:00:16.862152 - DECIDE', '2026-02-07T18:00:16.978536 - ERROR']
+2026-02-07 18:03:09,688 - apscheduler.scheduler - INFO - Removed job reminder_403314201_1770487389.682006
+2026-02-07 18:03:09,693 - apscheduler.executors.default - INFO - Running job "ReminderTool._send_notification (trigger: date[2026-02-07 18:03:09 UTC], next run at: 2026-02-07 18:03:09 UTC)" (scheduled at 2026-02-07 18:03:09.682006+00:00)
+2026-02-07 18:03:09,694 - Delio.ReminderTool - WARNING - ⚠️ Bot instance not set in scheduler, cannot send reminder.
+2026-02-07 18:03:09,695 - apscheduler.executors.default - INFO - Job "ReminderTool._send_notification (trigger: date[2026-02-07 18:03:09 UTC], next run at: 2026-02-07 18:03:09 UTC)" executed successfully

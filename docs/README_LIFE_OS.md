@@ -1,28 +1,31 @@
-# 🧬 Delio Assistant - User Manual
-
-## 🚀 Quick Start
-To launch the entire system (Bot + Dashboard + Database):
-
-```bash
-docker-compose up -d --build
-```
-
-Access the **Dashboard** at: `http://localhost:8501`
-
-## 🧩 Components
-1.  **AI Assistant**: Running in `main.py`. Connects to Telegram.
-    - **Models**: Auto-switches between `Gemini 1.5 Flash` (Fast) and `Gemini 1.5 Pro` (Smart) based on task complexity.
-    - **Auditor**: DeepSeek reviews every answer in the background.
-    - **Memory**: Stores insights in `data/bot_data.db`.
-
-2.  **Dashboard**: Running in `dashboard.py`.
-    - **Life Level**: View your current XP and Level.
-    - **Timeline**: See your strategic decision history.
-    - **Health**: Monitor the AI's efficiency scores.
-
-## 🛠️ Configuration
-- Keys are in `.env`.
-- To change models, edit `main.py` or `.env`.
-
-## 🕒 Proactivity
-The bot will send you a **Morning Briefing** (based on previous day's insights) automatically at 04:00 AM (UTC).
+# 🧬 Delio Assistant - Посібник користувача
++
++## 🚀 Швидкий старт
++Щоб запустити всю систему (Бот + Дашборд + База даних):
++
++```bash
++docker-compose up -d --build
++```
++
++Доступ до **Дашборду** за адресою: `http://localhost:8501`
++
++## 🧩 Архітектура (v5.0)
++1.  **Headless Kernel (`server.py`)**: Центральний мозок.
++    - **FastAPI**: Надає доступ до `/v1/chat` для високошвидкісної взаємодії.
++    - **Логіка**: Мислення на основі FSM із синергією Actor-Critic.
++    - **Пам'ять**: Зберігає уроки та знання в `data/bot_data.db` та ChromaDB.
++
++2.  **Telegram Interface (`client/bot.py`)**: Легковажний "Dumb Client", який обробляє події Telegram і пересилає їх у ядро.
++
++3.  **Knowledge Sync (`scripts/obsidian_sync.py`)**: Моніторить вашу папку `/data/obsidian` і автоматично індексує нотатки для RAG.
++
++## 🛠️ Конфігурація
++- **Birth**: `config.BIRTH_TIMESTAMP` визначає, коли система Delio була запущена.
++- **Soul**: `data/persona.yaml` визначає особистість та етапи життя.
++- **Auth**: `.env` містить усі API ключі (Gemini, DeepSeek).
++
++## 🕒 Проактивність та життя
++- **Heartbeat**: Кожні 30 хвилин Delio переглядає ваші поточні цілі та може виходити на зв'язок автономно.
++- **Fractal Digestion**: Щоденні (04:00 AM) та щотижневі дайджести складаються на основі історії чату.
++- **Ageing**: Особистість Delio змінюється (лаконічність, риси) у міру дорослішання.
++

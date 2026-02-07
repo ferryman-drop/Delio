@@ -29,7 +29,7 @@ sleep 1
 
 # 5. Start bot
 echo "🔥 Starting bot..."
-nohup python main.py > bot.log 2>&1 &
+nohup /root/ai_assistant/venv/bin/python main.py > bot.log 2>&1 &
 
 sleep 2
 

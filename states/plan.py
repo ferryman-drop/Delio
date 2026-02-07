@@ -13,9 +13,19 @@ from core.tool_registry import registry
 logger = logging.getLogger("Delio.Plan")
 
 class PlanState(BaseState):
+    def __init__(self, bot=None):
+        self.bot = bot
+
     async def execute(self, context: ExecutionContext) -> State:
         logger.debug(f"🤔 Planning for user {context.user_id} (Actor-Critic Mode)")
         
+        # UX: Show typing indicator
+        if self.bot:
+            try:
+                await self.bot.send_chat_action(context.user_id, action="typing")
+            except Exception as e:
+                logger.warning(f"Failed to send typing action: {e}")
+
         try:
             # 1. Build context-aware system instruction
             system_instruction = self._build_system_instruction(context)
@@ -24,16 +34,53 @@ class PlanState(BaseState):
             preferred = context.metadata.get("preferred_model", "gemini")
             
             # Use new service adapter
-            resp_text, model_used = await llm_service.call_actor(
-                user_id=context.user_id,
-                text=context.raw_input,
-                system_instruction=system_instruction,
-                preferred_model=preferred,
-                image_path=context.metadata.get("image_path")
-            )
+            try:
+                resp_text, model_used = await llm_service.call_actor(
+                    user_id=context.user_id,
+                    text=context.raw_input,
+                    system_instruction=system_instruction,
+                    preferred_model=preferred,
+                    image_path=context.metadata.get("image_path")
+                )
+            except Exception as actor_err:
+                logger.error(f"⚠️ Actor Call Failed: {actor_err}")
+                
+                # --- FALLBACK PROTOCOL: ACTIVATE BACKUP MODELS ---
+                # Attempt to use Judge (Claude) or Critic (DeepSeek) as Actor
+                try:
+                    logger.warning("🚨 Initiating FALLBACK to Backup Brain (Claude/DeepSeek)...")
+                    if config.ANTHROPIC_KEY:
+                        # Use Judge as Actor
+                        fallback_resp, fallback_model = await llm_service.call_judge(
+                            user_query=context.raw_input,
+                            actor_response="(Primary Brain Failed. You are now the Acting Brain. Answer the user directly.)",
+                            instruction=system_instruction
+                        )
+                        resp_text = fallback_resp
+                        model_used = "🧠 (Fallback)"
+                    elif config.DEEPSEEK_KEY:
+                         # Use Critic as Actor (trick it with empty actor response)
+                         fallback_resp, fallback_model = await llm_service.call_critic(
+                             user_query=context.raw_input,
+                             actor_response="[SYSTEM ERROR: Primary Model Failed. Please answer the user directly based on the query.]",
+                             instruction=system_instruction
+                         )
+                         if "@@@FINAL_RESPONSE@@@" in fallback_resp:
+                             resp_text = fallback_resp.split("@@@FINAL_RESPONSE@@@")[-1].strip()
+                         else:
+                             resp_text = fallback_resp
+                         model_used = "🐋 (Fallback)"
+                    else:
+                        raise Exception("No backup models available")
+                        
+                except Exception as backup_err:
+                     logger.error(f"❌ Backup Brain Failed: {backup_err}")
+                     resp_text = "⚠️ *Critical Brain Failure*\nI cannot connect to ANY of my cognitive centers. Please try again later."
+                     model_used = "💀 Dead"
             
             # 3. CRITIC PHASE (DeepSeek validation)
-            if config.ENABLE_SYNERGY and "Error" not in model_used:
+            # Skip Critic if intent is SIMPLE (Phase 2 Optimistic Flow)
+            if config.ENABLE_SYNERGY and "Error" not in model_used and context.intent != "SIMPLE":
                 validated_resp, synergy_label = await llm_service.call_critic(
                     user_query=context.raw_input,
                     actor_response=resp_text,
@@ -45,36 +92,15 @@ class PlanState(BaseState):
             else:
                 final_text = resp_text
                 # Icon mapping
-                icon = "♊"
+                icon = "☂️" if context.intent == "SIMPLE" else "♊"
                 if "pro" in model_used.lower(): icon = "🎓"
                 elif "deepseek" in model_used.lower(): icon = "🐋"
                 context.metadata["model_used"] = icon
 
-            # 4. PARSE TOOL CALLS (JSON Extraction)
-            # --- ROBUST JSON PARSER (Fix for "Regex Trap") ---
-            try:
-                # Find the first '{' and last '}'
-                start_idx = final_text.find('{')
-                end_idx = final_text.rfind('}')
-                
-                if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
-                    json_str = final_text[start_idx:end_idx+1]
-                    # Sanitize common LLM mistakes (like trailing commas)
-                    # For now, rely on stdlib, but could upgrade to json_repair
-                    data = json.loads(json_str)
-                    
-                    if "tool_calls" in data:
-                        context.tool_calls = data["tool_calls"]
-                    else:
-                        context.tool_calls = [] # Valid JSON but no tool calls
-                else:
-                    context.tool_calls = [] # No JSON found
-                    
-            except json.JSONDecodeError as e:
-                logger.warning(f"⚠️ JSON Parse Error: {e}. Raw text: {final_text[:100]}...")
-                context.tool_calls = [] # Fallback to text-only
+            # 4. PARSE TOOL CALLS (Robust Extraction)
+            context.tool_calls = self._extract_tool_calls(final_text)
             
-            # Clean response text from JSON for display (optional, depending on UX)
+            # Clean response text from JSON for display
             context.response = self._cleanup_response(final_text)
 
             # 5. Telemetry
@@ -125,8 +151,18 @@ class PlanState(BaseState):
             "2. **VERBOSITY**: Do not overwhelm. If the answer is long, provide the Key Insight and say 'Тисни /more для деталей'.",
             "3. **ANTI-BOMBARDMENT**: Ask MAXIMUM 1 question per response. Never ask 3-4 questions at once.",
             "4. **MATURITY**: Act as a Senior Partner. Don't ask 'Can I help?'. Assume the goal and act.",
-            "\n### ВАШ ПРОФІЛЬ ТА КОНТЕКСТ ЖИТТЯ:"
+            "5. **STRATEGIC MEMORY**: Whenever the user provides important facts about their goals, skills, identity, or life level, IMMEDIATELY use the `update_profile` tool to evolve your internal model. Don't just say 'I remembered it'.",
         ]
+        
+        # --- DYNAMIC ROLE INJECTION ---
+        custom_role = context.metadata.get("custom_role_prompt")
+        role_name = context.metadata.get("role_name", "Custom")
+        if custom_role:
+            instruction_parts.append(f"\n### 🎭 [ACTIVE ROLE OVERRIDE: {role_name.upper()}]")
+            instruction_parts.append(f"INSTRUCTION: {custom_role}")
+            instruction_parts.append("IMPORTANT: This role is your PRIMARY directive for this specific request. Prioritize its tone and task over general persona traits, but keep using technical tools (memory, obsidian) if needed.\n")
+            
+        instruction_parts.append("\n### ВАШ ПРОФІЛЬ ТА КОНТЕКСТ ЖИТТЯ:")
         
         structured = mem.get("structured_profile", {})
         for section, items in structured.items():
@@ -158,8 +194,8 @@ class PlanState(BaseState):
                 res = output.get("output") or output.get("error")
                 instruction_parts.append(f"• Tool '{name}': {res}")
             
-            # Important: Clear tool_outputs or track them to avoid infinite reprocessing if not careful
-            # Generally, we want to clear tool_calls so we don't re-execute them
+            # Important: Clear tool_outputs and tool_calls so we don't re-process them in the next loop iteration
+            context.tool_outputs = []
             context.tool_calls = []
 
         # --- IMAGE CONTEXT ---
@@ -187,26 +223,41 @@ class PlanState(BaseState):
         instruction_parts.append("\n### ТВОЇ ОСНОВНІ ІНСТРУКЦІЇ:")
 
         # --- ACTIVE REFLECTION (Task-012) ---
+        # Read lessons from structured memory (feedback_signals section)
         try:
-            import sqlite3
-            conn = sqlite3.connect('/root/ai_assistant/data/bot_data.db')
-            cursor = conn.cursor()
-            cursor.execute("""
-                SELECT critique, correction FROM lessons_learned 
-                WHERE user_id = ? AND score < 7 
-                ORDER BY created_at DESC LIMIT 3
-            """, (context.user_id,))
-            lessons = cursor.fetchall()
-            conn.close()
-            
-            if lessons:
+            feedback = structured.get("feedback_signals", {})
+            lesson_items = sorted(
+                [(k, v) for k, v in feedback.items() if k.startswith("lesson_")],
+                key=lambda x: x[0],
+                reverse=True
+            )[:3]
+            if lesson_items:
                 instruction_parts.append("\n### ⚠️ CRITICAL LEARNINGS FROM PAST MISTAKES:")
-                for idx, (critique, correction) in enumerate(lessons):
-                    instruction_parts.append(f"{idx+1}. Issue: {critique} -> Fix: {correction}")
-                instruction_parts.append("DO NOT REPEAT THESE ERRORS.")
+                for idx, (key, data) in enumerate(lesson_items):
+                    val = data.get("value", {})
+                    if isinstance(val, dict):
+                        critique = val.get("observation", val.get("critique", ""))
+                        correction = val.get("correction", "")
+                    else:
+                        critique = str(val)
+                        correction = ""
+                    if critique:
+                        instruction_parts.append(f"{idx+1}. Issue: {critique} -> Fix: {correction}")
+                if any(critique for _, data in lesson_items):
+                    instruction_parts.append("DO NOT REPEAT THESE ERRORS.")
         except Exception:
-            pass # Fail silently
-        instruction_parts.append(config.SYSTEM_PROMPT)
+            pass
+            
+            
+        # --- DYNAMIC PERSONA INJECTION (Phase 5) ---
+        try:
+            from core.personality import PersonalityEngine
+            dynamic_instruction = PersonalityEngine.get_system_instructions()
+            instruction_parts.append(dynamic_instruction)
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to generate Persona: {e}")
+            instruction_parts.append(config.SYSTEM_PROMPT)
+
         instruction_parts.append("\n" + config.TELEGRAM_STYLE)
         
         return "\n".join(instruction_parts)
@@ -217,8 +268,8 @@ class PlanState(BaseState):
             # Look for JSON blocks
             json_blocks = re.findall(r"```json\s*(.*?)\s*```", text, re.DOTALL)
             if not json_blocks:
-                # Try simple brace matching if no markdown blocks
-                match = re.search(r"(\{.*\})", text, re.DOTALL)
+                # Try to find tool_calls JSON specifically (non-greedy)
+                match = re.search(r'(\{"tool_calls"\s*:\s*\[.*?\]\s*\})', text, re.DOTALL)
                 if match:
                     json_blocks = [match.group(1)]
             

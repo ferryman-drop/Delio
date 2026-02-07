@@ -26,6 +26,11 @@ class RetrieveState(BaseState):
             life_level_data = funnel_data.get("structured_profile", {}).get("life_level", {})
             context.metadata["life_level"] = life_level_data.get("current", {}).get("value", "?")
             
+            # --- CONDITIONAL ROUTING ---
+            if context.metadata.get("mode") == "deep_think":
+                logger.info("🧠 Routing to DEEP_THINK via metadata flag")
+                return State.DEEP_THINK
+                
             return State.PLAN
             
         except Exception as e:

@@ -74,7 +74,7 @@ class ReminderTool(BaseTool):
             return
 
         # Attempt to enter NOTIFY state (only succeeds if IDLE)
-        if await guard.try_enter_notify(user_id):
+        if guard.try_enter_notify(user_id):
             try:
                 # 1. Send message
                 msg = f"🔔 **Нагадування:**\n{text}"

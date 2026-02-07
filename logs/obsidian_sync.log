@@ -1,0 +1,21 @@
+2026-02-07 00:19:41,388 - Delio.ObsidianSync - INFO - 🔌 Connecting to ChromaDB...
+2026-02-07 00:19:41,437 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-07 00:19:41,437 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2026-02-07 00:19:41,599 - Delio.ObsidianSync - INFO - 🔌 Connecting to Gemini...
+2026-02-07 00:19:41,889 - Delio.ObsidianSync - INFO - 👁️ Obsidian Watcher started on /data/obsidian. Initial scan incoming...
+2026-02-07 00:19:41,889 - Delio.ObsidianSync - INFO - 📄 Processing: /data/obsidian/Число.md
+2026-02-07 00:19:42,166 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:42,166 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:42,239 - Delio.ObsidianSync - INFO - ✅ Indexed: Число.md
+2026-02-07 00:19:42,239 - Delio.ObsidianSync - INFO - 📄 Processing: /data/obsidian/Witaj.md
+2026-02-07 00:19:42,459 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:42,459 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:42,500 - Delio.ObsidianSync - INFO - ✅ Indexed: Witaj.md
+2026-02-07 00:19:42,500 - Delio.ObsidianSync - INFO - 📄 Processing: /data/obsidian/Test.md
+2026-02-07 00:19:42,735 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:42,735 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:42,777 - Delio.ObsidianSync - INFO - ✅ Indexed: Test.md
+2026-02-07 00:19:42,778 - Delio.ObsidianSync - INFO - 📄 Processing: /data/obsidian/Inbox/Test Writer.md
+2026-02-07 00:19:43,002 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:43,002 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-02-07 00:19:43,060 - Delio.ObsidianSync - INFO - ✅ Indexed: Test Writer.md

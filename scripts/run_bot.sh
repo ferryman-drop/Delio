@@ -37,4 +37,4 @@ echo "dwm Installing requirements..."
 pip install -r requirements.txt
 
 echo "🔥 Running Bot..."
-python3 main.py
+./venv/bin/python main.py

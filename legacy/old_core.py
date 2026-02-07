@@ -387,7 +387,7 @@ async def transcribe_audio(file_path):
         # Generate transcription
         response = client.models.generate_content(
             model=config.MODEL_FAST,
-            contents=[audio_file, "Please transcribe this audio file verbatim."]
+            contents=[audio_file, "Please transcribe this audio file verbatim. If the audio is in Ukrainian, Russian, or Polish, transcribe it exactly in that language. Do not translate."]
         )
         return response.text
     except Exception as e:

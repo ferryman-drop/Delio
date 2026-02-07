@@ -1,0 +1,7 @@
+2026-02-07 10:47:08,266 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-07 10:47:08,380 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-07 10:47:08,381 - aiogram.dispatcher - INFO - Start polling
+2026-02-07 10:47:08,396 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 10:57:50,059 - aiogram.dispatcher - WARNING - Received SIGTERM signal
+2026-02-07 10:57:50,067 - aiogram.dispatcher - INFO - Polling stopped for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 10:57:50,068 - aiogram.dispatcher - INFO - Polling stopped

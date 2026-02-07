@@ -1,0 +1,109 @@
+nohup: ignoring input
+2026-02-06 20:52:54,993 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-06 20:52:55,116 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-06 20:52:55,117 - aiogram.dispatcher - INFO - Start polling
+2026-02-06 20:52:55,141 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-06 20:59:47,341 - aiogram.dispatcher - WARNING - Received SIGTERM signal
+2026-02-06 20:59:47,345 - aiogram.dispatcher - INFO - Polling stopped for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-06 20:59:47,345 - aiogram.dispatcher - INFO - Polling stopped
+2026-02-06 20:59:58,334 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-06 20:59:58,469 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-06 20:59:58,470 - aiogram.dispatcher - INFO - Start polling
+2026-02-06 20:59:58,490 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-06 21:34:21,375 - aiogram.dispatcher - WARNING - Received SIGTERM signal
+2026-02-06 21:34:21,381 - aiogram.dispatcher - INFO - Polling stopped for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-06 21:34:21,381 - aiogram.dispatcher - INFO - Polling stopped
+2026-02-06 21:34:36,732 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-06 21:34:36,903 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-06 21:34:36,904 - aiogram.dispatcher - INFO - Start polling
+2026-02-06 21:34:36,930 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-06 22:15:00,813 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-02-06 22:15:00,813 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8316389694)
+2026-02-06 22:15:11,871 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8316389694)
+2026-02-06 22:15:21,889 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-02-06 22:15:21,889 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8316389694)
+2026-02-06 22:15:32,945 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8316389694)
+2026-02-06 22:15:42,960 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-02-06 22:15:42,960 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8316389694)
+2026-02-06 22:15:54,023 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8316389694)
+2026-02-06 22:16:54,114 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-02-06 22:16:54,114 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8316389694)
+2026-02-06 22:17:05,187 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8316389694)
+2026-02-06 22:39:57,746 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramRetryAfter: Telegram server says - Flood control exceeded on method 'GetUpdates'. Retry in 5 seconds.
+Original description: Too Many Requests: retry after 5
+(background on this error at: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this)
+2026-02-06 22:39:57,747 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8316389694)
+2026-02-06 22:39:58,761 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramRetryAfter: Telegram server says - Flood control exceeded on method 'GetUpdates'. Retry in 5 seconds.
+Original description: Too Many Requests: retry after 5
+(background on this error at: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this)
+2026-02-06 22:39:58,762 - aiogram.dispatcher - WARNING - Sleep for 1.163162 seconds and try again... (tryings = 1, bot id = 8316389694)
+2026-02-06 22:39:59,941 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramRetryAfter: Telegram server says - Flood control exceeded on method 'GetUpdates'. Retry in 5 seconds.
+Original description: Too Many Requests: retry after 5
+(background on this error at: https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this)
+2026-02-06 22:39:59,941 - aiogram.dispatcher - WARNING - Sleep for 1.675639 seconds and try again... (tryings = 2, bot id = 8316389694)
+2026-02-06 22:40:02,980 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramServerError: Telegram server says - Bad Gateway
+2026-02-06 22:40:02,981 - aiogram.dispatcher - WARNING - Sleep for 2.115079 seconds and try again... (tryings = 3, bot id = 8316389694)
+2026-02-06 22:40:05,110 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramServerError: Telegram server says - Bad Gateway
+2026-02-06 22:40:05,110 - aiogram.dispatcher - WARNING - Sleep for 2.760868 seconds and try again... (tryings = 4, bot id = 8316389694)
+2026-02-06 22:40:07,887 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramServerError: Telegram server says - Bad Gateway
+2026-02-06 22:40:07,887 - aiogram.dispatcher - WARNING - Sleep for 3.542668 seconds and try again... (tryings = 5, bot id = 8316389694)
+2026-02-06 22:41:22,362 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-02-06 22:41:22,363 - aiogram.dispatcher - WARNING - Sleep for 4.468189 seconds and try again... (tryings = 6, bot id = 8316389694)
+2026-02-06 22:41:47,936 - aiogram.dispatcher - INFO - Connection established (tryings = 7, bot id = 8316389694)
+2026-02-06 23:29:27,369 - aiogram.dispatcher - WARNING - Received SIGTERM signal
+2026-02-06 23:29:27,375 - aiogram.dispatcher - INFO - Polling stopped for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-06 23:29:27,376 - aiogram.dispatcher - INFO - Polling stopped
+2026-02-06 23:29:41,345 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-06 23:29:41,523 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-06 23:29:41,524 - aiogram.dispatcher - INFO - Start polling
+2026-02-06 23:29:41,560 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-06 23:34:03,142 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:34:03,226 - aiogram.event - INFO - Update id=950762296 is handled. Duration 9912 ms by bot id=8316389694
+2026-02-06 23:38:45,198 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:38:45,267 - aiogram.event - INFO - Update id=950762297 is handled. Duration 3908 ms by bot id=8316389694
+2026-02-06 23:44:13,202 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:44:13,257 - aiogram.event - INFO - Update id=950762298 is handled. Duration 9804 ms by bot id=8316389694
+2026-02-06 23:45:44,720 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:45:44,787 - aiogram.event - INFO - Update id=950762299 is handled. Duration 30759 ms by bot id=8316389694
+2026-02-06 23:46:07,476 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:46:07,672 - Delio.Client - ERROR - Client Bridge Error: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+2026-02-06 23:46:07,764 - aiogram.event - INFO - Update id=950762300 is handled. Duration 10445 ms by bot id=8316389694
+2026-02-06 23:47:21,970 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:47:22,045 - Delio.Client - ERROR - Client Bridge Error: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+2026-02-06 23:47:22,081 - aiogram.event - INFO - Update id=950762302 is handled. Duration 11270 ms by bot id=8316389694
+2026-02-06 23:47:22,681 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:47:22,723 - aiogram.event - INFO - Update id=950762301 is handled. Duration 13630 ms by bot id=8316389694
+2026-02-06 23:51:24,294 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-06 23:51:24,329 - aiogram.event - INFO - Update id=950762303 is handled. Duration 11291 ms by bot id=8316389694
+2026-02-06 23:58:54,604 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-06 23:58:54,738 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-06 23:58:54,739 - aiogram.dispatcher - INFO - Start polling
+2026-02-06 23:58:54,760 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 00:00:50,909 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-07 00:00:51,079 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-07 00:00:51,079 - aiogram.dispatcher - INFO - Start polling
+2026-02-07 00:00:51,104 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 00:14:16,551 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-07 00:14:16,554 - aiogram.event - INFO - Update id=950762304 is handled. Duration 21327 ms by bot id=8316389694
+2026-02-07 00:15:02,549 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-07 00:15:02,550 - aiogram.event - INFO - Update id=950762305 is handled. Duration 6182 ms by bot id=8316389694
+2026-02-07 00:17:22,951 - aiogram.dispatcher - WARNING - Received SIGTERM signal
+2026-02-07 00:17:22,958 - aiogram.dispatcher - INFO - Polling stopped for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 00:17:22,962 - aiogram.dispatcher - INFO - Polling stopped
+2026-02-07 00:17:35,054 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-07 00:17:35,301 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-07 00:17:35,301 - aiogram.dispatcher - INFO - Start polling
+2026-02-07 00:17:35,325 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 00:19:40,774 - Delio.Client - INFO - 📡 Starting Delio Client...
+2026-02-07 00:19:40,925 - Delio.Client - INFO - ✅ Client connected to Telegram. Listening...
+2026-02-07 00:19:40,925 - aiogram.dispatcher - INFO - Start polling
+2026-02-07 00:19:40,956 - aiogram.dispatcher - INFO - Run polling for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 00:21:19,279 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-07 00:21:19,280 - aiogram.event - INFO - Update id=950762306 is handled. Duration 7165 ms by bot id=8316389694
+2026-02-07 00:38:55,472 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-07 00:38:55,474 - aiogram.event - INFO - Update id=950762307 is handled. Duration 6270 ms by bot id=8316389694
+2026-02-07 00:39:45,797 - httpx - INFO - HTTP Request: POST http://localhost:8000/v1/chat "HTTP/1.1 200 OK"
+2026-02-07 00:39:45,799 - aiogram.event - INFO - Update id=950762308 is handled. Duration 19466 ms by bot id=8316389694
+2026-02-07 00:41:26,225 - aiogram.dispatcher - WARNING - Received SIGTERM signal
+2026-02-07 00:41:26,229 - aiogram.dispatcher - INFO - Polling stopped for bot @ferrymano_bot id=8316389694 - 'Ferryman Assistant'
+2026-02-07 00:41:26,229 - aiogram.dispatcher - INFO - Polling stopped

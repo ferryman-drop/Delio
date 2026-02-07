@@ -1,0 +1,27 @@
+2026-02-07 00:41:50,642 - Delio.Tools - INFO - 🛠️ Phase 3 Agent Tools initialized.
+/root/ai_assistant/server.py:24: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Will watch for changes in these directories: ['/root/ai_assistant']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [473906] using WatchFiles
+2026-02-07 00:41:59,104 - Delio.Tools - INFO - 🛠️ Phase 3 Agent Tools initialized.
+INFO:     Started server process [473999]
+INFO:     Waiting for application startup.
+2026-02-07 00:41:59,271 - Delio.Server - INFO - 📡 Starting Delio Headless Server...
+2026-02-07 00:41:59,271 - memory_manager_v2 - INFO - ✅ Structured Memory V2 initialized
+2026-02-07 00:41:59,272 - memory_populator - INFO - ✅ Memory Auto-Populator initialized
+2026-02-07 00:41:59,272 - model_control - INFO - ✅ Model Controller initialized
+2026-02-07 00:41:59,273 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-07 00:41:59,274 - apscheduler.scheduler - INFO - Added job "trigger_heartbeat" to job store "default"
+2026-02-07 00:41:59,275 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-07 00:41:59,275 - scheduler - INFO - ⏳ Scheduler started
+2026-02-07 00:41:59,275 - Delio.Engine - INFO - ✅ Delio Headless Engine Initialized
+2026-02-07 00:41:59,276 - Delio.FSM - WARNING - 🧹 FSM CRASH AMNESIA: Resetting all user states to IDLE...
+2026-02-07 00:41:59,276 - Delio.FSM - INFO - ✅ Reset 0 users to IDLE.
+2026-02-07 00:41:59,276 - Delio.Server - INFO - ✅ Engine Initialized successfully
+INFO:     Application startup complete.

@@ -1,5 +1,0 @@
-nohup: ignoring input
-Traceback (most recent call last):
-  File "/root/ai_assistant/main.py", line 3, in <module>
-    from aiogram import Bot, Dispatcher
-ModuleNotFoundError: No module named 'aiogram'

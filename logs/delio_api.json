@@ -1,0 +1,83 @@
+{"timestamp": "2026-02-07T00:19:49.873446", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T00:19:49.873823", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T00:19:49.873986", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T00:19:49.874412", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T00:19:49.875709", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T00:19:49.875919", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T00:19:49.876131", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 180, "trace_id": null}
+{"timestamp": "2026-02-07T00:21:12.607358", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": null}
+{"timestamp": "2026-02-07T00:21:14.250982", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:15.030881", "level": "INFO", "message": "\u2705 Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db", "module": "memory_manager", "line": 206, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:15.261275", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:16.020673", "level": "INFO", "message": "\u2705 Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db", "module": "memory_manager", "line": 206, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:16.237115", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:17.110821", "level": "INFO", "message": "\u2705 Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db", "module": "memory_manager", "line": 206, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:17.347851", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:18.105984", "level": "INFO", "message": "\u2705 Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db", "module": "memory_manager", "line": 206, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:18.320524", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:21:19.149014", "level": "INFO", "message": "\u2705 Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db", "module": "memory_manager", "line": 206, "trace_id": "8dc1d2f5-5bf4-45a9-a682-d5b05885f848"}
+{"timestamp": "2026-02-07T00:27:24.819527", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:24.819864", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:24.820042", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:24.820584", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:24.821618", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:24.821781", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:24.821936", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 180, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:39.840717", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:39.841017", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:39.841256", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:39.841769", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:39.843029", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:39.843256", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:39.843476", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 180, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:53.305747", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:53.306031", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:53.306216", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:53.310724", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:53.311906", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:53.312074", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T00:27:53.312258", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 180, "trace_id": null}
+{"timestamp": "2026-02-07T00:30:00.001137", "level": "INFO", "message": "Running job \"trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 01:00:00 UTC)\" (scheduled at 2026-02-07 00:30:00+00:00)", "module": "base_py3", "line": 28, "trace_id": null}
+{"timestamp": "2026-02-07T00:30:00.005379", "level": "ERROR", "message": "\u274c Failed to fetch users for heartbeat: no such table: messages", "module": "scheduler", "line": 118, "trace_id": null}
+{"timestamp": "2026-02-07T00:30:00.006166", "level": "INFO", "message": "Job \"trigger_heartbeat (trigger: cron[minute='*/30'], next run at: 2026-02-07 01:00:00 UTC)\" executed successfully", "module": "base_py3", "line": 41, "trace_id": null}
+{"timestamp": "2026-02-07T00:38:49.676376", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": null}
+{"timestamp": "2026-02-07T00:38:51.428919", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "ac9c214f-9f33-4f5e-aa5b-aaa54e842fe9"}
+{"timestamp": "2026-02-07T00:38:52.778660", "level": "INFO", "message": "\u2705 Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db", "module": "memory_manager", "line": 206, "trace_id": "ac9c214f-9f33-4f5e-aa5b-aaa54e842fe9"}
+{"timestamp": "2026-02-07T00:38:53.083699", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "ac9c214f-9f33-4f5e-aa5b-aaa54e842fe9"}
+{"timestamp": "2026-02-07T00:38:55.464924", "level": "INFO", "message": "\ud83d\udcbe Saved interaction to memory for user 403314201", "module": "old_memory", "line": 109, "trace_id": "ac9c214f-9f33-4f5e-aa5b-aaa54e842fe9"}
+{"timestamp": "2026-02-07T00:38:55.469792", "level": "INFO", "message": "\ud83c\udf9b\ufe0f MCP derived for user 403314201: depth=medium, length=short, challenge=adaptive", "module": "model_control", "line": 129, "trace_id": "ac9c214f-9f33-4f5e-aa5b-aaa54e842fe9"}
+{"timestamp": "2026-02-07T00:39:26.497121", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": null}
+{"timestamp": "2026-02-07T00:39:27.498794", "level": "INFO", "message": "\ud83d\udd0d Retrieved 2 memories", "module": "old_memory", "line": 134, "trace_id": "66cafc32-2f66-4653-a4f5-5c7b908eb91f"}
+{"timestamp": "2026-02-07T00:39:28.202830", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "66cafc32-2f66-4653-a4f5-5c7b908eb91f"}
+{"timestamp": "2026-02-07T00:39:42.782111", "level": "INFO", "message": "\u2705 Strategic memory initialized (WAL enabled) at /root/ai_assistant/data/bot_data.db", "module": "memory_manager", "line": 206, "trace_id": "66cafc32-2f66-4653-a4f5-5c7b908eb91f"}
+{"timestamp": "2026-02-07T00:39:43.134740", "level": "INFO", "message": "AFC is enabled with max remote calls: 10.", "module": "models", "line": 5219, "trace_id": "66cafc32-2f66-4653-a4f5-5c7b908eb91f"}
+{"timestamp": "2026-02-07T00:39:45.793267", "level": "INFO", "message": "\ud83d\udcbe Saved interaction to memory for user 403314201", "module": "old_memory", "line": 109, "trace_id": "66cafc32-2f66-4653-a4f5-5c7b908eb91f"}
+{"timestamp": "2026-02-07T00:39:45.795416", "level": "INFO", "message": "\ud83c\udf9b\ufe0f MCP derived for user 403314201: depth=medium, length=short, challenge=adaptive", "module": "model_control", "line": 129, "trace_id": "66cafc32-2f66-4653-a4f5-5c7b908eb91f"}
+{"timestamp": "2026-02-07T00:41:17.154564", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:17.154954", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:17.155155", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:17.155676", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:17.156820", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:17.157078", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:17.157283", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 180, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:59.271766", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:59.272249", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:59.272630", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:59.273239", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:59.274493", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:59.275053", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T00:41:59.275501", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 180, "trace_id": null}
+{"timestamp": "2026-02-07T10:46:51.153360", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T10:46:51.155346", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T10:46:51.155917", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T10:46:51.156739", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T10:46:51.158353", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T10:46:51.158897", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T10:46:51.159407", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 180, "trace_id": null}
+{"timestamp": "2026-02-07T17:29:03.227893", "level": "INFO", "message": "\u2705 Structured Memory V2 initialized", "module": "memory_manager_v2", "line": 395, "trace_id": null}
+{"timestamp": "2026-02-07T17:29:03.228229", "level": "INFO", "message": "\u2705 Memory Auto-Populator initialized", "module": "memory_populator", "line": 157, "trace_id": null}
+{"timestamp": "2026-02-07T17:29:03.228368", "level": "INFO", "message": "\u2705 Model Controller initialized", "module": "model_control", "line": 169, "trace_id": null}
+{"timestamp": "2026-02-07T17:29:03.228805", "level": "INFO", "message": "Adding job tentatively -- it will be properly scheduled when the scheduler starts", "module": "base", "line": 454, "trace_id": null}
+{"timestamp": "2026-02-07T17:29:03.230954", "level": "INFO", "message": "Added job \"trigger_heartbeat\" to job store \"default\"", "module": "base", "line": 895, "trace_id": null}
+{"timestamp": "2026-02-07T17:29:03.231237", "level": "INFO", "message": "Scheduler started", "module": "base", "line": 181, "trace_id": null}
+{"timestamp": "2026-02-07T17:29:03.231449", "level": "INFO", "message": "\u23f3 Scheduler started", "module": "scheduler", "line": 188, "trace_id": null}

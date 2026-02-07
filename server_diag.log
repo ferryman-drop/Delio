@@ -1,0 +1,32 @@
+2026-02-07 10:46:43,288 - Delio.Tools - INFO - 🛠️ Phase 3 Agent Tools initialized.
+/root/ai_assistant/server.py:24: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Will watch for changes in these directories: ['/root/ai_assistant']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [488231] using WatchFiles
+2026-02-07 10:46:50,967 - Delio.Tools - INFO - 🛠️ Phase 3 Agent Tools initialized.
+INFO:     Started server process [488304]
+INFO:     Waiting for application startup.
+2026-02-07 10:46:51,152 - Delio.Server - INFO - 📡 Starting Delio Headless Server...
+2026-02-07 10:46:51,153 - memory_manager_v2 - INFO - ✅ Structured Memory V2 initialized
+2026-02-07 10:46:51,155 - memory_populator - INFO - ✅ Memory Auto-Populator initialized
+2026-02-07 10:46:51,155 - model_control - INFO - ✅ Model Controller initialized
+2026-02-07 10:46:51,156 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-02-07 10:46:51,158 - apscheduler.scheduler - INFO - Added job "trigger_heartbeat" to job store "default"
+2026-02-07 10:46:51,158 - apscheduler.scheduler - INFO - Scheduler started
+2026-02-07 10:46:51,159 - scheduler - INFO - ⏳ Scheduler started
+2026-02-07 10:46:51,159 - Delio.Engine - INFO - ✅ Delio Headless Engine Initialized
+2026-02-07 10:46:51,160 - Delio.FSM - WARNING - 🧹 FSM CRASH AMNESIA: Resetting all user states to IDLE...
+2026-02-07 10:46:51,160 - Delio.FSM - INFO - ✅ Reset 0 users to IDLE.
+2026-02-07 10:46:51,160 - Delio.Server - INFO - ✅ Engine Initialized successfully
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [488304]
+INFO:     Stopping reloader process [488231]

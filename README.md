@@ -1,46 +1,44 @@
-# 🌧️ Delio (v4.1)
+# 🌧️ Delio (v5.0 - Живе Ядро)
 
-> **"Not just a bot. A Life OS."**
+> **"Не просто бот. Цифровий Організм."**
 
-Delio is an advanced AI assistant framework designed for personal strategy, focus management, and intellectual resonance. It operates as a high-latency, persistent FSM (Finite State Machine) that doesn't just reply — it **thinks**, **plans**, and **acts**.
+Delio — це просунута система AI Life OS, яка еволюціонує з часом. У версії 5.0 вона перетворюється зі статичного асистента на живу сутність із цифровим народженням, етапами життя та глибокою інтеграцією з вашою базою знань.
 
-## 🧠 The Nucleus (Core Architecture)
+## 🧠 Ядро (Основна архітектура)
 
-*   **Triumvirate Intelligence**: Combines **Gemini 1.5 Pro** (Actor), **DeepSeek V3** (Critic), and **Claude 3.5 Sonnet** (Judge).
-*   **Persistent Memory**: 
-    *   Redis (Short-term context)
-    *   ChromaDB (Long-term semantic recall)
-    *   SQLite (Structured "Life Profile")
-*   **State Machine**: A rigorous FSM (`IDLE` -> `THINK` -> `PLAN` -> `ACT`) prevents hallucination loops.
+*   **Інтелект Тріумвірату**: Логіка Actor-Critic з використанням **Gemini 2.0/2.5** та **DeepSeek V3**.
+*   **Headless Kernel**: Децентралізований сервер на FastAPI для максимальної мобільності та стійкості.
+*   **Постійна пам'ять**: 
+    *   **Obsidian Knowledge Engine**: Синхронізація у реальному часі з вашим сховищем `/data/obsidian`.
+    *   **ChromaDB**: Семантичне індексування кожної нотатки та розмови.
+    *   **SQLite**: Фрактальне перетравлення пам'яті (щоденні та щотижневі дайджести).
 
-## ⭐ Key Features (Phase 4.1)
+## ⭐ Ключові особливості (Фаза 5.0)
 
-1.  **Resonance UX**: It feels alive. It pulses with a "Heartbeat" to check on you if you're silent.
-2.  **Maturity Protocol**: Adapts to your level. Senior-level brevity by default. Use `/more` for deep dives.
-3.  **Kernel Hardening**: 
-    *   Trace IDs for every thought.
-    *   Admin Alerts on Telegram for critical errors.
-    *   Robust JSON parsing and memory budgeting.
+1.  **Цифрове народження та старіння**: Delio відстежує свій вік з моменту "Народження" (запуск v4.0). Він еволюціонує через етапи життя (Немовля, Дитина, Підліток, Дорослий), змінюючи свій тон і поведінку в міру дорослішання.
+2.  **Адаптивна персона**: Риси особистості динамічно вводяться в системний промпт на основі розвитку Delio та вашої історії взаємодії.
+3.  **Obsidian Reader/Writer**: Delio може здійснювати семантичний пошук у вашому "другому мозку" і навіть писати в нього (додавати думки, створювати логи) за допомогою нових спеціалізованих інструментів.
+4.  **Стійкість (BERI)**: Спеціальний watchdog моніторить усі процеси (`server.py`, `client/bot.py`, `obsidian_sync.py`) і самовідновлюється у разі збою.
 
-## 🛠️ Deployment
+## 🛠️ Розгортання
 
 ```bash
-# 1. Clone & Config
+# 1. Клонування та конфігурація
 git clone https://github.com/ferryman-drop/delio-core.git
 cp config.example.yaml config.yaml
 
-# 2. Run with Docker
+# 2. Запуск через Docker
 docker-compose up -d --build
 
-# 3. Awaken
-# Send /start in Telegram
+# 3. Пробудження
+# Відправте /start у Telegram
 ```
 
-## 📜 Documentation
+## 📜 Документація
 
-- [Roadmap](docs/MASTER_ROADMAP.md) - The future of Delio.
-- [Development Plan](docs/DEVELOPMENT_PLAN.md) - Current status.
-- [Hardening Report](docs/TASK_014_HARDENING_REPORT.md) - Security details.
+- [Roadmap](docs/MASTER_ROADMAP.md) - Майбутнє Delio.
+- [Development Plan](docs/DEVELOPMENT_PLAN.md) - Поточний статус.
+- [Hardening Report](docs/TASK_014_HARDENING_REPORT.md) - Деталі безпеки.
 
 ---
 *Powered by Ferryman Drop.*

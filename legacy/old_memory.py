@@ -33,8 +33,11 @@ def get_embedding(text: str, task_type: str = "retrieval_document") -> list[floa
         
         # New SDK: client.models.embed_content
         result = client.models.embed_content(
-            model="text-embedding-004",
-            contents=text
+            model="models/gemini-embedding-001",
+            contents=text,
+            config={
+                'task_type': task_type.upper()
+            }
         )
         # Result structure: result.embeddings[0].values (list of floats)
         return result.embeddings[0].values
@@ -161,6 +164,32 @@ def save_note(user_id: int, content: str, topic: str = "general"):
     except Exception as e:
         logger.error(f"❌ Failed to save note: {e}")
     return False
+
+def search_obsidian(query: str, limit: int = 5) -> list[str]:
+    """Retrieve context from Obsidian Knowledge vault"""
+    global chroma_client
+    if chroma_client is None:
+        init_memory()
+    
+    try:
+        # Use specific collection name from obsidian_sync.py
+        obs_collection = chroma_client.get_collection(name="obsidian_knowledge")
+        
+        emb_query = get_embedding(query, "retrieval_query")
+        if not emb_query:
+            return []
+
+        results = obs_collection.query(
+            query_embeddings=[emb_query],
+            n_results=limit
+        )
+        
+        if results and results['documents']:
+            return [doc for doc in results['documents'][0] if doc]
+    except Exception as e:
+        # Expected if collection doesn't exist yet
+        logger.debug(f"Obsidian search skipped: {e}")
+    return []
 
 def search_notes(user_id: int, query: str, limit: int = 3) -> list[str]:
     """Пошук серед нотаток користувача"""
